@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -57,11 +56,100 @@
     --chart-5: 340 75% 55%;
   }
 }
-@layer base {
-  * {
-    @apply border-border;
+@layer components {
+  .background-primary {
+    background: linear-gradient(90deg, #232535ff, #242736ff, #222534ff, #1f212fff, #1f212fff, #1f212fff, #1f212fff, #1f212fff);
   }
-  body {
-    @apply bg-background text-foreground;
+
+  .filter-gray {
+    filter: invert(57%) sepia(56%) saturate(142%) hue-rotate(184deg) brightness(92%) contrast(85%);
+  }
+
+  .filter-orange {
+    filter: invert(57%) sepia(84%) saturate(1642%) hue-rotate(1deg) brightness(105%) contrast(103%);
+  }
+
+  .filter-blue {
+    filter: invert(32%) sepia(32%) saturate(3832%) hue-rotate(241deg) brightness(103%) contrast(102%);
+  }
+
+  .button-primary {
+    @apply h-[46px] w-fit min-w-[46px] relative flex justify-center items-center px-3 rounded bg-[#242838];
+  }
+
+  .button-primary:hover {
+    @apply bg-[#2e3348];
+  }
+
+  .button-primary.streams::after,
+  .button-primary.streams::before,
+  .button-primary.airstreams::after,
+  .button-primary.airstreams::before {
+    content: '';
+    @apply absolute w-full h-[2px] bg-[#2347d4];
+  }
+
+  .button-primary.streams::after,
+  .button-primary.streams::before {
+    background: linear-gradient(270deg, rgb(60, 66, 93) 0%, transparent 70%);
+  }
+
+  .button-primary.airstreams::after,
+  .button-primary.airstreams::before {
+    background: linear-gradient(90deg, rgb(60, 66, 93) 0%, transparent 70%);
+  }
+
+  .button-primary.streams::before,
+  .button-primary.airstreams::before {
+    @apply top-0 left-0;
+  }
+  .button-primary.streams::after,
+  .button-primary.airstreams::after {
+    @apply bottom-0 left-0;
+  }
+
+  .button-primary.streams.selected {
+    @apply text-core-orange border-2 border-core-orange bg-core-orange-opacity-01;
+  }
+  .button-primary.airstreams.selected {
+    @apply text-core-blue border-2 border-core-blue bg-core-blue-opacity-01;
+  }
+
+  .button-primary.airstreams.selected::after {
+    @apply w-1/2 left-auto right-2 -bottom-[2px];
+    background: linear-gradient(90deg, #874fff, #ffffff4d, #874fff);
+  }
+
+  .shadowDialog {
+    box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.32);
+  }
+
+  .loadingAnimation {
+    width: 48px;
+    height: 48px;
+    border: 5px solid #fff;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+  }
+
+  @keyframes rotation {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  .hideScroll {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .hideScroll::-webkit-scrollbar {
+    display: none;
   }
 }

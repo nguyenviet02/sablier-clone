@@ -7,6 +7,7 @@ import { cookieToInitialState } from 'wagmi';
 
 import { getConfig } from '../wagmi';
 import { Providers } from './providers';
+import Header from '@/components/Header';
 
 const urbanist = Urbanist({ subsets: ['latin'] });
 
@@ -23,7 +24,12 @@ export default function RootLayout(props: { children: ReactNode }) {
   return (
     <html lang="en">
       <body className={urbanist.className}>
-        <Providers initialState={initialState}>{props.children}</Providers>
+        <Providers initialState={initialState}>
+          <section className="w-screen min-h-screen background-primary">
+            <Header />
+            <div className="w-full max-w-[1312px] mx-auto px-4">{props.children}</div>
+          </section>
+        </Providers>
       </body>
     </html>
   );

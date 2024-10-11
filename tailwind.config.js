@@ -56,6 +56,14 @@ module.exports = {
 					'3': 'hsl(var(--chart-3))',
 					'4': 'hsl(var(--chart-4))',
 					'5': 'hsl(var(--chart-5))'
+				},
+				core: {
+					"orange": "#ff9c00",
+					"orange-opacity-01": "#ff9c001a",
+					"blue": "#874fff",
+					"blue-opacity-01": "#874fff1a",
+					"gray": "#8792ab",
+					"border": "#2a2e41"
 				}
 			},
 		}
