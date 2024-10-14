@@ -152,4 +152,13 @@
   .hideScroll::-webkit-scrollbar {
     display: none;
   }
+
+  .bg-header-message {
+    background: linear-gradient(225deg, rgb(136, 93, 245) 0%, rgb(94, 37, 255) 100%);
+  }
+  .button-header-message::after {
+    content: '';
+    @apply absolute -left-1 -bottom-[2px] z-20 w-[72px] h-[2px];
+    background: linear-gradient(90deg, #874fff00, #874fff 50%, #874fff00);
+  }
 }
