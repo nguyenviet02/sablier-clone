@@ -16,7 +16,6 @@ type Props = {};
 
 const Header = (props: Props) => {
   const pathname = usePathname();
-  console.log('☠️ ~ Header ~ pathname:', pathname);
   const router = useRouter();
   const account = useAccount();
   const isAccountConnected = account.status === 'connected';

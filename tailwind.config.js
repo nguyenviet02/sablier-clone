@@ -11,6 +11,9 @@ module.exports = {
 	],
 	theme: {
 		extend: {
+			fontFamily: {
+				"catamaran": "Catamaran, sans-serif",
+			},
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Catamaran:wght@100..900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -74,7 +76,7 @@
   }
 
   .button-primary {
-    @apply h-[46px] w-fit min-w-[46px] relative flex justify-center items-center px-3 rounded bg-[#242838];
+    @apply size-[46px] min-w-fit relative flex justify-center items-center px-3 rounded bg-[#242838];
   }
 
   .button-primary:hover {
