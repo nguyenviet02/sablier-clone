@@ -66,7 +66,9 @@ module.exports = {
 					"blue": "#874fff",
 					"blue-opacity-01": "#874fff1a",
 					"gray": "#8792ab",
-					"border": "#2a2e41"
+					"border": "#2a2e41",
+					"background": "#242838",
+					"background-secondary": "#1E212F"
 				}
 			},
 		}

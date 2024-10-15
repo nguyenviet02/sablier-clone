@@ -1,16 +1,15 @@
 'use client';
 
+import CreateStreamsForm from '@/components/CreateStreamsForm';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import ArrowLeft from 'icons/ArrowLeft';
 import ArrowRight from 'icons/ArrowRight';
-import { useSearchParams } from 'next/navigation';
 import React from 'react';
 
 type Props = {};
 
 const CreateStreams = (props: Props) => {
-  const searchParams = useSearchParams();
-  const selectedShape = searchParams.get('shape');
+
   return (
     <div className="size-full">
       <header className="w-full py-8 flex flex-col gap-4">
@@ -36,6 +35,7 @@ const CreateStreams = (props: Props) => {
           <p className="text-[32px] text-white font-catamaran font-semibold">Create Streams</p>
         </div>
       </header>
+			<CreateStreamsForm />
     </div>
   );
 };

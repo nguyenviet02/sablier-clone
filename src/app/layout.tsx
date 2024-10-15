@@ -25,7 +25,7 @@ export default function RootLayout(props: { children: ReactNode }) {
     <html lang="en">
       <body className={urbanist.className}>
         <Providers initialState={initialState}>
-          <section className="w-screen min-h-screen background-primary">
+          <section className="w-full min-h-screen background-primary">
             <Header />
             <div className="w-full max-w-[1312px] mx-auto px-4">{props.children}</div>
           </section>
