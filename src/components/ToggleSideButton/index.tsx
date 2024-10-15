@@ -11,7 +11,7 @@ const ToggleSideButton = ({ isOn, handleToggle }: Props) => {
     <div className="flex items-center">
       <button
         onClick={() => handleToggle(true)}
-        className={`flex h-7 min-w-8 items-center justify-center gap-1 rounded bg-core-background px-[10px] text-[14px] font-bold leading-[18px] text-core-gray ${isOn ? "bg-[#3c425d] text-white" : ""}`}
+        className={`flex h-7 min-w-8 items-center justify-center gap-1 rounded bg-core-background px-[10px] text-[14px] font-bold leading-[18px] text-core-gray ${isOn ? "!bg-[#3c425d] text-white" : ""}`}
       >
         On
         {isOn && (
@@ -35,7 +35,7 @@ const ToggleSideButton = ({ isOn, handleToggle }: Props) => {
       </button>
       <button
         onClick={() => handleToggle(false)}
-        className={`flex h-7 min-w-8 items-center justify-center gap-1 rounded bg-core-background px-[10px] text-[14px] font-bold leading-[18px] text-core-gray ${!isOn && "bg-[#3c425d] text-white"}`}
+        className={`flex h-7 min-w-8 items-center justify-center gap-1 rounded bg-core-background px-[10px] text-[14px] font-bold leading-[18px] text-core-gray ${!isOn && "!bg-[#3c425d] text-white"}`}
       >
         Off
         {!isOn && <CloseIcon className="size-4" />}
