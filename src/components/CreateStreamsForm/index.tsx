@@ -20,6 +20,7 @@ import DialogConnectWallet from "../DialogConnectWallet";
 import { useChainId, useReadContract } from "wagmi";
 import { erc20Abi } from "viem";
 import listTokens from "@/tokens";
+import DialogChooseToken from "../DialogChooseToken";
 
 type Props = {};
 
@@ -36,6 +37,8 @@ const CreateStreamsForm = (props: Props) => {
   console.log("☠️ ~ CreateStreamsForm ~ listTokens:", listTokens);
 
   const [isOpenDialogConnectWallet, setIsOpenDialogConnectWallet] =
+    React.useState(false);
+  const [isOpenDialogChooseToken, setIsOpenDialogChooseToken] =
     React.useState(false);
   const [dataGeneralDetails, setDataGeneralDetails] =
     React.useState<TStreamGeneralDetail>({
@@ -88,6 +91,10 @@ const CreateStreamsForm = (props: Props) => {
   const openDialogConnectWallet = () => {
     setIsOpenDialogConnectWallet(true);
   };
+
+	const openDialogChooseToken = () => {
+		setIsOpenDialogChooseToken(true)
+	}
 
   return (
     <TooltipProvider>
@@ -142,7 +149,7 @@ const CreateStreamsForm = (props: Props) => {
                 <h3 className="text-[16px] font-semibold text-core-gray">
                   Token
                 </h3>
-                <button className="flex h-[56px] items-center justify-between rounded-md border-2 border-transparent bg-core-background-secondary px-3 hover:border-core-border">
+                <button onClick={openDialogChooseToken} className="flex h-[56px] items-center justify-between rounded-md border-2 border-transparent bg-core-background-secondary px-3 hover:border-core-border">
                   <div className="flex items-center gap-3">
                     <div className="size-[26px] rounded-full bg-core-background"></div>
                     <p className="text-base font-semibold text-[#474E6D]">
@@ -392,6 +399,10 @@ const CreateStreamsForm = (props: Props) => {
       <DialogConnectWallet
         isOpen={isOpenDialogConnectWallet}
         setIsOpen={setIsOpenDialogConnectWallet}
+      />
+      <DialogChooseToken
+        isOpen={isOpenDialogChooseToken}
+        setIsOpen={setIsOpenDialogChooseToken}
       />
     </TooltipProvider>
   );

@@ -27,3 +27,19 @@ export type TDataStream = {
   recipient: string;
   duration: string;
 };
+
+export type TDataToken = {
+  address: `0x${string}`;
+  chainId: number;
+  decimals: number;
+  logoURI: string;
+  name: string;
+  symbol: string;
+  extensions?: {
+    bridgeInfo: {
+      [key: string]: {
+        tokenAddress: string;
+      };
+    };
+  };
+};
