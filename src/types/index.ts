@@ -28,6 +28,10 @@ export type TDataStream = {
   duration: string;
 };
 
+export type TListToken = {
+  [key: string]: TDataToken[];
+};
+
 export type TDataToken = {
   address: `0x${string}`;
   chainId: number;

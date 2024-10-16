@@ -17,9 +17,6 @@ import DetailStreamForm from "../DetailStreamForm";
 import PlusIcon from "icons/PlusIcon";
 import { TStreamGeneralDetail, TDataStream } from "@/types";
 import DialogConnectWallet from "../DialogConnectWallet";
-import { useChainId, useReadContract } from "wagmi";
-import { erc20Abi } from "viem";
-import listTokens from "@/tokens";
 import DialogChooseToken from "../DialogChooseToken";
 
 type Props = {};
@@ -27,14 +24,6 @@ type Props = {};
 const CreateStreamsForm = (props: Props) => {
   const searchParams = useSearchParams();
   const selectedShape = searchParams.get("shape");
-
-  const chainId = useChainId();
-  console.log("☠️ ~ CreateStreamsForm ~ chainId:", chainId);
-  const result = useReadContract({
-    abi: erc20Abi,
-    chainId: chainId,
-  });
-  console.log("☠️ ~ CreateStreamsForm ~ listTokens:", listTokens);
 
   const [isOpenDialogConnectWallet, setIsOpenDialogConnectWallet] =
     React.useState(false);
@@ -92,16 +81,16 @@ const CreateStreamsForm = (props: Props) => {
     setIsOpenDialogConnectWallet(true);
   };
 
-	const openDialogChooseToken = () => {
-		setIsOpenDialogChooseToken(true)
-	}
+  const openDialogChooseToken = () => {
+    setIsOpenDialogChooseToken(true);
+  };
 
   return (
     <TooltipProvider>
       <div className="flex gap-8 pb-8">
         <div className="flex w-full flex-1 flex-col gap-8">
           {/* General Details */}
-          <div className="w-full flex-1 space-y-8 rounded-xl bg-core-background p-6">
+          <div className="w-full flex-1 rounded-xl bg-core-background p-6">
             <div className="flex w-full items-center justify-between pb-6">
               <h2 className="text-[18px] font-semibold text-[#e1e4ea]">
                 General Details
@@ -149,7 +138,10 @@ const CreateStreamsForm = (props: Props) => {
                 <h3 className="text-[16px] font-semibold text-core-gray">
                   Token
                 </h3>
-                <button onClick={openDialogChooseToken} className="flex h-[56px] items-center justify-between rounded-md border-2 border-transparent bg-core-background-secondary px-3 hover:border-core-border">
+                <button
+                  onClick={openDialogChooseToken}
+                  className="flex h-[56px] items-center justify-between rounded-md border-2 border-transparent bg-core-background-secondary px-3 hover:border-core-border"
+                >
                   <div className="flex items-center gap-3">
                     <div className="size-[26px] rounded-full bg-core-background"></div>
                     <p className="text-base font-semibold text-[#474E6D]">

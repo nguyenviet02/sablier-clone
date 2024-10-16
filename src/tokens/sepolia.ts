@@ -1,54 +1,46 @@
-import { TDataToken } from "@/types"
+import { TDataToken } from "@/types";
 
-const sepoliaTokens:TDataToken[] = [
+const sepoliaTokens: TDataToken[] = [
   {
-    "address": "0x776b6fC2eD15D6Bb5Fc32e0c89DE68683118c62A",
-    "chainId": 11155111,
-    "decimals": 18,
-    "logoURI": "https://files.sablier.com/tokens/DAI.png",
-    "name": "Dai Stablecoin",
-    "symbol": "DAI"
+    address: "0x776b6fC2eD15D6Bb5Fc32e0c89DE68683118c62A",
+    chainId: 11155111,
+    decimals: 18,
+    logoURI: "https://nguyenviet02.github.io/token-images/DAI.png",
+    name: "Dai Stablecoin",
+    symbol: "DAI",
   },
   {
-    "address": "0x34a62c23261F6a84A40614a68ADDF41943F5d6C6",
-    "chainId": 11155111,
-    "decimals": 18,
-    "logoURI": "https://files.sablier.com/tokens/SALD.png",
-    "name": "Salad",
-    "symbol": "SALD"
+    address: "0x34a62c23261F6a84A40614a68ADDF41943F5d6C6",
+    chainId: 11155111,
+    decimals: 18,
+    logoURI: "https://nguyenviet02.github.io/token-images/SALD.png",
+    name: "Salad",
+    symbol: "SALD",
   },
   {
-    "address": "0xB5CACad778b963C4b973Eb82A48a3911e5c745cc",
-    "chainId": 11155111,
-    "decimals": 18,
-    "logoURI": "https://assets.coingecko.com/coins/images/36465/standard/Symbol-Color.png",
-    "name": "Omni Network",
-    "symbol": "OMNI"
+    address: "0xB5CACad778b963C4b973Eb82A48a3911e5c745cc",
+    chainId: 11155111,
+    decimals: 18,
+    logoURI: "https://nguyenviet02.github.io/token-images/Symbol-Color.png",
+    name: "Omni Network",
+    symbol: "OMNI",
   },
   {
-    "address": "0xaA8E23Fb1079EA71e0a56F48a2aA51851D8433D0",
-    "chainId": 11155111,
-    "decimals": 6,
-    "logoURI": "https://files.sablier.com/tokens/USDT.png",
-    "name": "USDT",
-    "symbol": "USDT"
+    address: "0xaA8E23Fb1079EA71e0a56F48a2aA51851D8433D0",
+    chainId: 11155111,
+    decimals: 6,
+    logoURI: "https://nguyenviet02.github.io/token-images/USDT.png",
+    name: "USDT",
+    symbol: "USDT",
   },
   {
-    "address": "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238",
-    "chainId": 11155111,
-    "decimals": 6,
-    "logoURI": "https://files.sablier.com/tokens/USDC.png",
-    "name": "USDC",
-    "symbol": "USDC"
+    address: "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238",
+    chainId: 11155111,
+    decimals: 6,
+    logoURI: "https://nguyenviet02.github.io/token-images/USDC.png",
+    name: "USDC",
+    symbol: "USDC",
   },
-  {
-    "address": "0x82AF3812418D2c60A5e41093dE5D5130e895b3e8",
-    "chainId": 11155111,
-    "decimals": 18,
-    "logoURI": "https://files.sablier.com/tokens/MIKA.png",
-    "name": "MIKA",
-    "symbol": "MIKA"
-  }
-]
+];
 
-export default sepoliaTokens
+export default sepoliaTokens;

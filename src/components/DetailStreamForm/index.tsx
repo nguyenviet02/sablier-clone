@@ -45,6 +45,10 @@ const DetailStreamForm = ({
     resolver: zodResolver(formSchema),
   });
 
+  const removeStream = () => {
+    setDataStreams((prev) => prev.filter((data) => data.id !== dataDetail.id));
+  };
+
   //* Need optimization
   const handleChangeValue = (field: string, value: string | number) => {
     setDataStreams((prev) =>
@@ -84,10 +88,13 @@ const DetailStreamForm = ({
             Chart
           </button>
           <div className="h-[30px] w-[2px] bg-core-border"></div>
-          {true && (
+          {dataStreams?.length > 1 && (
             <>
               {" "}
-              <button className="flex items-center justify-center gap-1 text-[14px] font-bold text-core-gray disabled:text-[#424966]">
+              <button
+                onClick={removeStream}
+                className="flex items-center justify-center gap-1 text-[14px] font-bold text-core-gray disabled:text-[#424966]"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -146,7 +153,7 @@ const DetailStreamForm = ({
                     onChange={(e) =>
                       handleChangeValue("amount", e.target.value)
                     }
-										value={dataDetail?.amount || undefined}
+                    value={dataDetail?.amount || undefined}
                     type="number"
                     placeholder="Fill in an amount..."
                     className="h-[56px] rounded-md border-2 border-transparent bg-core-background-secondary px-3 text-base font-semibold text-white outline-none placeholder:text-[#474E6D] focus:border-core-border focus-visible:ring-0"
@@ -168,7 +175,7 @@ const DetailStreamForm = ({
                     onChange={(e) =>
                       handleChangeValue("recipient", e.target.value)
                     }
-										value={dataDetail?.recipient}
+                    value={dataDetail?.recipient}
                     placeholder="Fill in an address or ENS..."
                     className="h-[56px] rounded-md border-2 border-transparent bg-core-background-secondary px-3 text-base font-semibold text-white outline-none placeholder:text-[#474E6D] focus:border-core-border focus-visible:ring-0"
                   />
