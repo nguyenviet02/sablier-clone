@@ -1,5 +1,6 @@
 import { useSearchParams } from "next/navigation";
-import React from "react";
+import Image from "next/image";
+import React, { useMemo } from "react";
 import Divider from "../Divider";
 import Linear from "shapes/Linear";
 import LockIcon from "icons/Lock";
@@ -15,6 +16,10 @@ import ToggleSideButton from "../ToggleSideButton";
 import DetailStreamForm from "../DetailStreamForm";
 import PlusIcon from "icons/PlusIcon";
 import { TStreamGeneralDetail, TDataStream } from "@/types";
+import DialogConnectWallet from "../DialogConnectWallet";
+import { useChainId, useReadContract } from "wagmi";
+import { erc20Abi } from "viem";
+import listTokens from "@/tokens";
 
 type Props = {};
 
@@ -22,6 +27,16 @@ const CreateStreamsForm = (props: Props) => {
   const searchParams = useSearchParams();
   const selectedShape = searchParams.get("shape");
 
+  const chainId = useChainId();
+  console.log("☠️ ~ CreateStreamsForm ~ chainId:", chainId);
+  const result = useReadContract({
+    abi: erc20Abi,
+    chainId: chainId,
+  });
+  console.log("☠️ ~ CreateStreamsForm ~ listTokens:", listTokens);
+
+  const [isOpenDialogConnectWallet, setIsOpenDialogConnectWallet] =
+    React.useState(false);
   const [dataGeneralDetails, setDataGeneralDetails] =
     React.useState<TStreamGeneralDetail>({
       shape: "",
@@ -32,13 +47,17 @@ const CreateStreamsForm = (props: Props) => {
   const [dataStreams, setDataStreams] = React.useState<TDataStream[]>([
     {
       id: v4(),
-      amount: null,
+      amount: 0,
       recipient: "",
       duration: "",
     },
   ]);
 
-  console.log("data Streams", dataStreams);
+  const totalAmount = useMemo(() => {
+    return dataStreams.reduce((acc, stream) => {
+      return acc + Number(stream?.amount || 0);
+    }, 0);
+  }, [dataStreams]);
 
   const handleSetCancelable = (state: boolean) => {
     setDataGeneralDetails((prev) => ({
@@ -59,11 +78,15 @@ const CreateStreamsForm = (props: Props) => {
       ...prev,
       {
         id: v4(),
-        amount: null,
+        amount: 0,
         recipient: "",
         duration: "",
       },
     ]);
+  };
+
+  const openDialogConnectWallet = () => {
+    setIsOpenDialogConnectWallet(true);
   };
 
   return (
@@ -230,8 +253,146 @@ const CreateStreamsForm = (props: Props) => {
             <p>Add new stream</p>
           </button>
         </div>
-        <div className="w-[400px] shrink-0"></div>
+        <div className="w-[400px] shrink-0">
+          <div className="mb-6 flex items-center justify-between">
+            <h3 className="text-[18px] font-semibold text-white">Summary</h3>
+            <div className="flex items-center gap-2 text-[14px] font-bold text-core-gray">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                aria-hidden="true"
+                data-slot="icon"
+                className="size-4"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M21 11.25v8.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 1 0 9.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1 1 14.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z"
+                ></path>
+              </svg>
+              Free to use
+            </div>
+          </div>
+          <div className="mb-6 flex w-full flex-col gap-4 rounded-lg bg-core-background p-6">
+            <div className="flex w-full items-center justify-between">
+              <p className="text-[16px] font-medium text-white">Chain</p>
+              <div className="flex items-center gap-1 text-[16px] font-medium text-white">
+                <Image
+                  src={"/images/ethereum.png"}
+                  alt="chain logo"
+                  width={20}
+                  height={20}
+                  className="h-5 w-auto shrink-0"
+                />
+                Sepolia
+              </div>
+            </div>
+            <div className="flex w-full items-center justify-between">
+              <p className="text-[16px] font-medium text-white">
+                Cancelability
+              </p>
+              <div className="flex items-center gap-1 text-[16px] font-medium text-white">
+                {dataGeneralDetails.isCancelable
+                  ? "Yes, will be cancelable"
+                  : "No, won't be cancelable"}
+              </div>
+            </div>
+            <div className="flex w-full items-center justify-between">
+              <p className="text-[16px] font-medium text-white">
+                Transferability
+              </p>
+              <div className="flex items-center gap-1 text-[16px] font-medium text-white">
+                {dataGeneralDetails.isTransferable
+                  ? "Yes, will be transferable"
+                  : "No, won't be transferable"}
+              </div>
+            </div>
+            <div className="flex w-full items-center justify-between">
+              <p className="text-[16px] font-medium text-white">Token</p>
+              <Image
+                src={"/images/ethereum.png"}
+                alt="chain logo"
+                width={20}
+                height={20}
+                className="h-5 w-auto shrink-0"
+              />
+            </div>
+            <div className="flex w-full items-center justify-between">
+              <p className="text-[16px] font-medium text-white">Calldata</p>
+              <p className="text-[14px] font-medium text-core-gray">
+                Preview Calldata
+              </p>
+            </div>
+          </div>
+          <div className="mb-6 flex w-full items-center justify-between">
+            <div className="flex flex-col">
+              <h3 className="text-[16px] font-semibold text-[#e1e4ea]">
+                Total
+              </h3>
+              <p className="flex items-center gap-1 text-[14px] font-medium text-core-gray">
+                Excluding gas
+                <InfoIcon className="size-4" />
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <Image
+                src="/images/ethereum.png"
+                alt="chain logo"
+                width={20}
+                height={20}
+                className="h-5 w-auto shrink-0"
+              />
+              <p className="text-[18px] font-bold text-white">
+                {totalAmount || 0}
+              </p>
+            </div>
+          </div>
+          <div className="mb-6 flex w-full flex-col gap-6 rounded-lg bg-core-background p-6 text-[#ffb800]">
+            <div className="flex items-center gap-1">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="2.5"
+                stroke="currentColor"
+                aria-hidden="true"
+                data-slot="icon"
+                className="size-4"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                ></path>
+              </svg>
+              <p className="font-semibold leading-[16pt]">
+                Wallet connection required
+              </p>
+            </div>
+            <p className="font-medium leading-[150%]">
+              You need to connect your account first. Check the top right corner
+              or click below to link your wallet.
+            </p>
+
+            <button
+              onClick={openDialogConnectWallet}
+              className="min-h-8 w-fit rounded-md border-2 border-[#ffb800] px-[6px] text-[11pt] font-bold hover:bg-core-background-secondary"
+            >
+              Required: Connect
+            </button>
+          </div>
+          <button className="btn-create-streams flex h-[46px] w-full items-center justify-center rounded-lg font-bold text-white">
+            Create Streams
+          </button>
+        </div>
       </div>
+      <DialogConnectWallet
+        isOpen={isOpenDialogConnectWallet}
+        setIsOpen={setIsOpenDialogConnectWallet}
+      />
     </TooltipProvider>
   );
 };

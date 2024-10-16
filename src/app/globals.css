@@ -191,4 +191,13 @@
   input[type="number"] {
     -moz-appearance: textfield;
   }
+
+  .btn-create-streams {
+    background: linear-gradient(
+        225deg,
+        rgb(255, 184, 0) 0%,
+        rgb(255, 115, 0) 100%
+      )
+      0% 0% / 100% 100%;
+  }
 }
