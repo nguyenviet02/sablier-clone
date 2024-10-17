@@ -15,9 +15,10 @@ import SettingIcon from "icons/SettingIcon";
 type Props = {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
+  setSelectedToken: (token: TDataToken) => void;
 };
 
-const DialogChooseToken = ({ isOpen, setIsOpen }: Props) => {
+const DialogChooseToken = ({ isOpen, setIsOpen, setSelectedToken }: Props) => {
   const { chains } = useSwitchChain();
   const [searchText, setSearchText] = useState("");
   const [listTokensOnChain, setListTokensOnChain] = useState<TDataToken[]>([]);
@@ -29,6 +30,11 @@ const DialogChooseToken = ({ isOpen, setIsOpen }: Props) => {
     const value = e.target.value;
     setSearchText(value);
   };
+
+	const handleSelectToken = (token: TDataToken) => {
+		setSelectedToken(token)
+		setIsOpen(false)
+	}
 
   useEffect(() => {
     if (chainId) {
@@ -102,6 +108,7 @@ const DialogChooseToken = ({ isOpen, setIsOpen }: Props) => {
           {listTokensOnChain?.map((token: TDataToken) => {
             return (
               <button
+                onClick={() => handleSelectToken(token)}
                 key={token?.address}
                 className="group flex h-[64px] w-full items-center justify-between gap-2 rounded-lg px-2 hover:bg-[#2a2e41]"
               >
@@ -152,11 +159,11 @@ const DialogChooseToken = ({ isOpen, setIsOpen }: Props) => {
                 ></path>
               </svg>
             </button>
-            <button className="button-primary flex gap-1 h-8 border border-core-border text-[14px] font-bold">
+            <button className="button-primary flex h-8 gap-1 border border-core-border text-[14px] font-bold">
               List yours
               <PlusIcon className="size-4" />
             </button>
-            <button className="button-primary flex gap-1 h-8 border border-core-border text-[14px] font-bold">
+            <button className="button-primary flex h-8 gap-1 border border-core-border text-[14px] font-bold">
               Manage
               <SettingIcon className="size-4" />
             </button>

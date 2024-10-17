@@ -1,6 +1,14 @@
 import { TDataToken } from "@/types";
 
 const sepoliaTokens: TDataToken[] = [
+	{
+    address: "0xd7F7E45856B3F1974c1A4955A485de7fccBd2cbb",
+    chainId: 11155111,
+    decimals: 18,
+    logoURI: "https://nguyenviet02.github.io/token-images/DAI.png",
+    name: "NXV Token",
+    symbol: "NXV",
+  },
   {
     address: "0x776b6fC2eD15D6Bb5Fc32e0c89DE68683118c62A",
     chainId: 11155111,

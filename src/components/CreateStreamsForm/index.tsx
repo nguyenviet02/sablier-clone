@@ -15,20 +15,35 @@ import InfoIcon from "icons/InfoIcon";
 import ToggleSideButton from "../ToggleSideButton";
 import DetailStreamForm from "../DetailStreamForm";
 import PlusIcon from "icons/PlusIcon";
-import { TStreamGeneralDetail, TDataStream } from "@/types";
+import { TStreamGeneralDetail, TDataStream, TDataToken } from "@/types";
 import DialogConnectWallet from "../DialogConnectWallet";
 import DialogChooseToken from "../DialogChooseToken";
+import {
+  useWriteContract,
+  useReadContract,
+  useAccount,
+  useTransaction,
+} from "wagmi";
+import { sablierAbi } from "@/abis";
+import { erc20Abi } from "viem";
 
 type Props = {};
 
 const CreateStreamsForm = (props: Props) => {
   const searchParams = useSearchParams();
   const selectedShape = searchParams.get("shape");
+  const account = useAccount();
+  console.log("☠️ ~ CreateStreamsForm ~ account:", account);
 
   const [isOpenDialogConnectWallet, setIsOpenDialogConnectWallet] =
     React.useState(false);
   const [isOpenDialogChooseToken, setIsOpenDialogChooseToken] =
     React.useState(false);
+  const [selectedToken, setSelectedToken] = React.useState<TDataToken | null>(
+    null,
+  );
+  const [hashOfTransaction, setHashOfTransaction] =
+    React.useState<`0x${string}`>("0x");
   const [dataGeneralDetails, setDataGeneralDetails] =
     React.useState<TStreamGeneralDetail>({
       shape: "",
@@ -44,6 +59,7 @@ const CreateStreamsForm = (props: Props) => {
       duration: "",
     },
   ]);
+  console.log("☠️ ~ CreateStreamsForm ~ dataStreams:", dataStreams);
 
   const totalAmount = useMemo(() => {
     return dataStreams.reduce((acc, stream) => {
@@ -84,6 +100,83 @@ const CreateStreamsForm = (props: Props) => {
   const openDialogChooseToken = () => {
     setIsOpenDialogChooseToken(true);
   };
+
+  const resultTest = useTransaction({
+    hash: hashOfTransaction,
+  });
+  console.log("☠️ ~ CreateStreamsForm ~ resultTest:", resultTest);
+
+  const { writeContractAsync: writeContractSpendTokenAsync, status: statusAllowSpendToken } = useWriteContract();
+  console.log('☠️ ~ CreateStreamsForm ~ statusAllowSpendToken:', statusAllowSpendToken)
+
+  const allowSpendToken = async () => {
+    try {
+      const res = await writeContractSpendTokenAsync({
+        abi: erc20Abi,
+        address: selectedToken?.address!,
+        functionName: "approve",
+        args: [
+          "0x14fcd1d4223621976c7594DA3d2bE3d5033c81E7", // Address of third party
+          BigInt(totalAmount * 10 ** selectedToken?.decimals!), // Amount of token
+        ],
+      });
+      if (res) {
+        setHashOfTransaction(res);
+      }
+    } catch (error) {
+      console.log("☠️ ~ allowSpendToken ~ error:", error);
+    }
+  };
+
+  const { data: allowanceAmount, refetch: refetchAllowanceAmount } =
+    useReadContract({
+      abi: erc20Abi,
+      functionName: "allowance",
+      address: selectedToken?.address, //Address of token
+      args: [
+        account?.address!, //Address of owner
+        "0x14fcd1d4223621976c7594DA3d2bE3d5033c81E7", //Address of third party
+      ],
+    });
+  console.log("☠️ ~ CreateStreamsForm ~ allowanceAmount:", allowanceAmount);
+
+	const { writeContractAsync: writeContractCreateStreamsAsync } = useWriteContract();
+  const createStreams = async () => {
+    const res = await writeContractCreateStreamsAsync({
+      abi: sablierAbi,
+      address: "0x14fcd1d4223621976c7594DA3d2bE3d5033c81E7", // Address of contracts
+      functionName: "createWithDurationsLL",
+      args: [
+        "0xCa60c92B4380a5B1a1147340C35233632229eE9d", // Address of lockuplinear
+        "0xd7f7e45856b3f1974c1a4955a485de7fccbd2cbb", // Address of token
+        [
+          {
+            sender: "0x50cca9A48609a8C06cEafD9a649417fDE1465829",
+            recipient: "0x6766Ea9fCBD356Cf6B576307dcf05bC1dEb7Ad30",
+            totalAmount: BigInt(100),
+            cancelable: true,
+            transferable: true,
+            durations: { total: 10000, cliff: 0 },
+            broker: {
+              account: "0x0000000000000000000000000000000000000000",
+              fee: BigInt(0),
+            },
+          },
+        ],
+      ],
+    });
+    console.log("☠️ ~ createStreams ~ res:", res);
+  };
+
+  const isNeedApprove = useMemo(() => {
+    if (!selectedToken) return false;
+    if (!totalAmount) return false;
+    if (!allowanceAmount) return true;
+    return (
+      parseInt(allowanceAmount?.toString()) / 10 ** selectedToken?.decimals <
+      totalAmount
+    );
+  }, [selectedToken, totalAmount, allowanceAmount]);
 
   return (
     <TooltipProvider>
@@ -143,10 +236,26 @@ const CreateStreamsForm = (props: Props) => {
                   className="flex h-[56px] items-center justify-between rounded-md border-2 border-transparent bg-core-background-secondary px-3 hover:border-core-border"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="size-[26px] rounded-full bg-core-background"></div>
-                    <p className="text-base font-semibold text-[#474E6D]">
-                      Choose a token from the list...
-                    </p>
+                    {selectedToken?.address ? (
+                      <>
+                        <Image
+                          src={selectedToken?.logoURI}
+                          alt="Image"
+                          width={32}
+                          height={32}
+                        />
+                        <p className="text-base font-semibold text-white">
+                          {selectedToken?.name}
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        <div className="size-[26px] rounded-full bg-core-background"></div>
+                        <p className="text-base font-semibold text-[#474E6D]">
+                          Choose a token from the list...
+                        </p>
+                      </>
+                    )}
                   </div>
                   <div className="flex h-8 w-fit min-w-8 items-center justify-center rounded-sm bg-core-background px-3 text-[14px] font-semibold text-core-gray hover:bg-[#2e3348]">
                     Choose
@@ -383,7 +492,24 @@ const CreateStreamsForm = (props: Props) => {
               Required: Connect
             </button>
           </div>
-          <button className="btn-create-streams flex h-[46px] w-full items-center justify-center rounded-lg font-bold text-white">
+          {isNeedApprove && (
+            <div className="mb-6 flex w-full flex-col gap-6 rounded-lg bg-core-background p-6">
+              <p className="text-[14px] text-core-gray">
+                Approve Sablier to spend your {selectedToken?.symbol} tokens and
+                create the group of streams.
+              </p>
+              <button
+                onClick={allowSpendToken}
+                className="btn-create-streams flex h-[46px] w-full items-center justify-center rounded-lg bg-white font-bold text-black"
+              >
+                Allow
+              </button>
+            </div>
+          )}
+          <button
+            onClick={createStreams}
+            className="btn-create-streams flex h-[46px] w-full items-center justify-center rounded-lg font-bold text-white"
+          >
             Create Streams
           </button>
         </div>
@@ -395,6 +521,7 @@ const CreateStreamsForm = (props: Props) => {
       <DialogChooseToken
         isOpen={isOpenDialogChooseToken}
         setIsOpen={setIsOpenDialogChooseToken}
+        setSelectedToken={setSelectedToken}
       />
     </TooltipProvider>
   );
