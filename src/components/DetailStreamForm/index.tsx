@@ -26,6 +26,7 @@ const DetailStreamForm = ({
   dataStreams,
   setDataStreams,
 }: Props) => {
+  console.log('☠️ ~ dataDetail:', dataDetail)
   const currentIndex = useMemo(() => {
     return dataStreams.findIndex((data) => data.id === dataDetail.id) + 1;
   }, [dataStreams, dataDetail.id]);
@@ -153,7 +154,7 @@ const DetailStreamForm = ({
                     onChange={(e) =>
                       handleChangeValue("amount", e.target.value)
                     }
-                    value={dataDetail?.amount || undefined}
+                    value={dataDetail?.amount!}
                     type="number"
                     placeholder="Fill in an amount..."
                     className="h-[56px] rounded-md border-2 border-transparent bg-core-background-secondary px-3 text-base font-semibold text-white outline-none placeholder:text-[#474E6D] focus:border-core-border focus-visible:ring-0"

@@ -1,6 +1,6 @@
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import Divider from "../Divider";
 import Linear from "shapes/Linear";
 import LockIcon from "icons/Lock";
@@ -22,7 +22,7 @@ import {
   useWriteContract,
   useReadContract,
   useAccount,
-  useTransaction,
+  useWaitForTransactionReceipt,
 } from "wagmi";
 import { sablierAbi } from "@/abis";
 import { erc20Abi } from "viem";
@@ -59,7 +59,6 @@ const CreateStreamsForm = (props: Props) => {
       duration: "",
     },
   ]);
-  console.log("☠️ ~ CreateStreamsForm ~ dataStreams:", dataStreams);
 
   const totalAmount = useMemo(() => {
     return dataStreams.reduce((acc, stream) => {
@@ -101,13 +100,12 @@ const CreateStreamsForm = (props: Props) => {
     setIsOpenDialogChooseToken(true);
   };
 
-  const resultTest = useTransaction({
+  const resultTest = useWaitForTransactionReceipt({
     hash: hashOfTransaction,
   });
-  console.log("☠️ ~ CreateStreamsForm ~ resultTest:", resultTest);
 
-  const { writeContractAsync: writeContractSpendTokenAsync, status: statusAllowSpendToken } = useWriteContract();
-  console.log('☠️ ~ CreateStreamsForm ~ statusAllowSpendToken:', statusAllowSpendToken)
+  const { writeContractAsync: writeContractSpendTokenAsync } =
+    useWriteContract();
 
   const allowSpendToken = async () => {
     try {
@@ -123,9 +121,7 @@ const CreateStreamsForm = (props: Props) => {
       if (res) {
         setHashOfTransaction(res);
       }
-    } catch (error) {
-      console.log("☠️ ~ allowSpendToken ~ error:", error);
-    }
+    } catch (error) {}
   };
 
   const { data: allowanceAmount, refetch: refetchAllowanceAmount } =
@@ -138,9 +134,9 @@ const CreateStreamsForm = (props: Props) => {
         "0x14fcd1d4223621976c7594DA3d2bE3d5033c81E7", //Address of third party
       ],
     });
-  console.log("☠️ ~ CreateStreamsForm ~ allowanceAmount:", allowanceAmount);
 
-	const { writeContractAsync: writeContractCreateStreamsAsync } = useWriteContract();
+  const { writeContractAsync: writeContractCreateStreamsAsync } =
+    useWriteContract();
   const createStreams = async () => {
     const res = await writeContractCreateStreamsAsync({
       abi: sablierAbi,
@@ -148,10 +144,10 @@ const CreateStreamsForm = (props: Props) => {
       functionName: "createWithDurationsLL",
       args: [
         "0xCa60c92B4380a5B1a1147340C35233632229eE9d", // Address of lockuplinear
-        "0xd7f7e45856b3f1974c1a4955a485de7fccbd2cbb", // Address of token
+        selectedToken?.address!, // Address of token
         [
           {
-            sender: "0x50cca9A48609a8C06cEafD9a649417fDE1465829",
+            sender: account?.address!,
             recipient: "0x6766Ea9fCBD356Cf6B576307dcf05bC1dEb7Ad30",
             totalAmount: BigInt(100),
             cancelable: true,
@@ -165,7 +161,6 @@ const CreateStreamsForm = (props: Props) => {
         ],
       ],
     });
-    console.log("☠️ ~ createStreams ~ res:", res);
   };
 
   const isNeedApprove = useMemo(() => {
@@ -177,6 +172,10 @@ const CreateStreamsForm = (props: Props) => {
       totalAmount
     );
   }, [selectedToken, totalAmount, allowanceAmount]);
+
+  useEffect(() => {
+    refetchAllowanceAmount();
+  }, [resultTest?.data]);
 
   return (
     <TooltipProvider>
@@ -458,40 +457,42 @@ const CreateStreamsForm = (props: Props) => {
               </p>
             </div>
           </div>
-          <div className="mb-6 flex w-full flex-col gap-6 rounded-lg bg-core-background p-6 text-[#ffb800]">
-            <div className="flex items-center gap-1">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="2.5"
-                stroke="currentColor"
-                aria-hidden="true"
-                data-slot="icon"
-                className="size-4"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                ></path>
-              </svg>
-              <p className="font-semibold leading-[16pt]">
-                Wallet connection required
+          {!account?.isConnected && (
+            <div className="mb-6 flex w-full flex-col gap-6 rounded-lg bg-core-background p-6 text-[#ffb800]">
+              <div className="flex items-center gap-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="2.5"
+                  stroke="currentColor"
+                  aria-hidden="true"
+                  data-slot="icon"
+                  className="size-4"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                  ></path>
+                </svg>
+                <p className="font-semibold leading-[16pt]">
+                  Wallet connection required
+                </p>
+              </div>
+              <p className="font-medium leading-[150%]">
+                You need to connect your account first. Check the top right
+                corner or click below to link your wallet.
               </p>
-            </div>
-            <p className="font-medium leading-[150%]">
-              You need to connect your account first. Check the top right corner
-              or click below to link your wallet.
-            </p>
 
-            <button
-              onClick={openDialogConnectWallet}
-              className="min-h-8 w-fit rounded-md border-2 border-[#ffb800] px-[6px] text-[11pt] font-bold hover:bg-core-background-secondary"
-            >
-              Required: Connect
-            </button>
-          </div>
+              <button
+                onClick={openDialogConnectWallet}
+                className="min-h-8 w-fit rounded-md border-2 border-[#ffb800] px-[6px] text-[11pt] font-bold hover:bg-core-background-secondary"
+              >
+                Required: Connect
+              </button>
+            </div>
+          )}
           {isNeedApprove && (
             <div className="mb-6 flex w-full flex-col gap-6 rounded-lg bg-core-background p-6">
               <p className="text-[14px] text-core-gray">
