@@ -149,10 +149,10 @@ const CreateStreamsForm = (props: Props) => {
           {
             sender: account?.address!,
             recipient: "0x6766Ea9fCBD356Cf6B576307dcf05bC1dEb7Ad30",
-            totalAmount: BigInt(100),
+            totalAmount: BigInt(totalAmount * 10 ** selectedToken?.decimals!),
             cancelable: true,
             transferable: true,
-            durations: { total: 10000, cliff: 0 },
+            durations: { total: 1000000, cliff: 0 },
             broker: {
               account: "0x0000000000000000000000000000000000000000",
               fee: BigInt(0),

@@ -13,6 +13,7 @@ module.exports = {
 		extend: {
 			fontFamily: {
 				"catamaran": "Catamaran, sans-serif",
+				"roboto-mono": "Roboto Mono, monospace",
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
