@@ -1,0 +1,2469 @@
+type _Block_ {
+  """The hash of the block"""
+  hash: Bytes
+
+  """The block number"""
+  number: Int!
+
+  """Integer representation of the timestamp stored in blocks for the chain"""
+  timestamp: Int
+
+  """The hash of the parent block"""
+  parentHash: Bytes
+}
+
+"""The type for the top-level _meta field"""
+type _Meta_ {
+  """
+  Information about a specific subgraph block. The hash of the block
+  will be null if the _meta field has a block constraint that asks for
+  a block number. It will be filled if the _meta field has no block constraint
+  and therefore asks for the latest  block
+  """
+  block: _Block_!
+
+  """The deployment ID"""
+  deployment: String!
+
+  """If `true`, the subgraph encountered indexing errors at some past block"""
+  hasIndexingErrors: Boolean!
+}
+
+enum _SubgraphErrorPolicy_ {
+  """Data will be returned even if the subgraph has indexing errors"""
+  allow
+
+  """
+  If the subgraph has indexing errors, data will be omitted. The default.
+  """
+  deny
+}
+
+type Action {
+  """
+  unique identifier resolving to transaction hash concatenated with the log index (there may be multiple actions per tx)
+  """
+  id: ID!
+
+  """transaction details: block number"""
+  block: BigInt!
+
+  """category of action e.g. Deposit or Withdraw"""
+  category: ActionCategory!
+
+  """hardcoded chain id"""
+  chainId: BigInt!
+
+  """contract through which the stream actions has been triggered"""
+  contract: Contract!
+
+  """transaction details: hash"""
+  hash: Bytes!
+
+  """address that triggered the transaction"""
+  from: Bytes!
+
+  """
+  stream linked to this action (or null if this is a contract level action)
+  """
+  stream: Stream
+
+  """unique global id tracked by the subgraph watcher"""
+  subgraphId: BigInt!
+
+  """transaction details: timestamp"""
+  timestamp: BigInt!
+
+  """
+  address of an actor, differs based on action type e.g. for Create it resolves to the sender
+  """
+  addressA: Bytes
+
+  """
+  address of an actor, differs based on action type e.g. for Transfer it resolves to the new recipient
+  """
+  addressB: Bytes
+
+  """
+  amount, differs based on action type e.g. for Deposit it resolves to the depositAmount
+  """
+  amountA: BigInt
+
+  """
+  amount, differs based on action type e.g. for Withdraw it resolves to the refundedAmount
+  """
+  amountB: BigInt
+}
+
+input Action_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  block: BigInt
+  block_not: BigInt
+  block_gt: BigInt
+  block_lt: BigInt
+  block_gte: BigInt
+  block_lte: BigInt
+  block_in: [BigInt!]
+  block_not_in: [BigInt!]
+  category: ActionCategory
+  category_not: ActionCategory
+  category_in: [ActionCategory!]
+  category_not_in: [ActionCategory!]
+  chainId: BigInt
+  chainId_not: BigInt
+  chainId_gt: BigInt
+  chainId_lt: BigInt
+  chainId_gte: BigInt
+  chainId_lte: BigInt
+  chainId_in: [BigInt!]
+  chainId_not_in: [BigInt!]
+  contract: String
+  contract_not: String
+  contract_gt: String
+  contract_lt: String
+  contract_gte: String
+  contract_lte: String
+  contract_in: [String!]
+  contract_not_in: [String!]
+  contract_contains: String
+  contract_contains_nocase: String
+  contract_not_contains: String
+  contract_not_contains_nocase: String
+  contract_starts_with: String
+  contract_starts_with_nocase: String
+  contract_not_starts_with: String
+  contract_not_starts_with_nocase: String
+  contract_ends_with: String
+  contract_ends_with_nocase: String
+  contract_not_ends_with: String
+  contract_not_ends_with_nocase: String
+  contract_: Contract_filter
+  hash: Bytes
+  hash_not: Bytes
+  hash_gt: Bytes
+  hash_lt: Bytes
+  hash_gte: Bytes
+  hash_lte: Bytes
+  hash_in: [Bytes!]
+  hash_not_in: [Bytes!]
+  hash_contains: Bytes
+  hash_not_contains: Bytes
+  from: Bytes
+  from_not: Bytes
+  from_gt: Bytes
+  from_lt: Bytes
+  from_gte: Bytes
+  from_lte: Bytes
+  from_in: [Bytes!]
+  from_not_in: [Bytes!]
+  from_contains: Bytes
+  from_not_contains: Bytes
+  stream: String
+  stream_not: String
+  stream_gt: String
+  stream_lt: String
+  stream_gte: String
+  stream_lte: String
+  stream_in: [String!]
+  stream_not_in: [String!]
+  stream_contains: String
+  stream_contains_nocase: String
+  stream_not_contains: String
+  stream_not_contains_nocase: String
+  stream_starts_with: String
+  stream_starts_with_nocase: String
+  stream_not_starts_with: String
+  stream_not_starts_with_nocase: String
+  stream_ends_with: String
+  stream_ends_with_nocase: String
+  stream_not_ends_with: String
+  stream_not_ends_with_nocase: String
+  stream_: Stream_filter
+  subgraphId: BigInt
+  subgraphId_not: BigInt
+  subgraphId_gt: BigInt
+  subgraphId_lt: BigInt
+  subgraphId_gte: BigInt
+  subgraphId_lte: BigInt
+  subgraphId_in: [BigInt!]
+  subgraphId_not_in: [BigInt!]
+  timestamp: BigInt
+  timestamp_not: BigInt
+  timestamp_gt: BigInt
+  timestamp_lt: BigInt
+  timestamp_gte: BigInt
+  timestamp_lte: BigInt
+  timestamp_in: [BigInt!]
+  timestamp_not_in: [BigInt!]
+  addressA: Bytes
+  addressA_not: Bytes
+  addressA_gt: Bytes
+  addressA_lt: Bytes
+  addressA_gte: Bytes
+  addressA_lte: Bytes
+  addressA_in: [Bytes!]
+  addressA_not_in: [Bytes!]
+  addressA_contains: Bytes
+  addressA_not_contains: Bytes
+  addressB: Bytes
+  addressB_not: Bytes
+  addressB_gt: Bytes
+  addressB_lt: Bytes
+  addressB_gte: Bytes
+  addressB_lte: Bytes
+  addressB_in: [Bytes!]
+  addressB_not_in: [Bytes!]
+  addressB_contains: Bytes
+  addressB_not_contains: Bytes
+  amountA: BigInt
+  amountA_not: BigInt
+  amountA_gt: BigInt
+  amountA_lt: BigInt
+  amountA_gte: BigInt
+  amountA_lte: BigInt
+  amountA_in: [BigInt!]
+  amountA_not_in: [BigInt!]
+  amountB: BigInt
+  amountB_not: BigInt
+  amountB_gt: BigInt
+  amountB_lt: BigInt
+  amountB_gte: BigInt
+  amountB_lte: BigInt
+  amountB_in: [BigInt!]
+  amountB_not_in: [BigInt!]
+
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
+  and: [Action_filter]
+  or: [Action_filter]
+}
+
+enum Action_orderBy {
+  id
+  block
+  category
+  chainId
+  contract
+  contract__id
+  contract__version
+  contract__alias
+  contract__address
+  contract__admin
+  contract__category
+  hash
+  from
+  stream
+  stream__id
+  stream__alias
+  stream__subgraphId
+  stream__tokenId
+  stream__version
+  stream__category
+  stream__chainId
+  stream__hash
+  stream__timestamp
+  stream__funder
+  stream__sender
+  stream__recipient
+  stream__proxender
+  stream__proxied
+  stream__cliff
+  stream__cancelable
+  stream__renounceTime
+  stream__canceled
+  stream__canceledTime
+  stream__cliffTime
+  stream__cliffAmount
+  stream__endTime
+  stream__startTime
+  stream__duration
+  stream__transferable
+  stream__depositAmount
+  stream__intactAmount
+  stream__withdrawnAmount
+  stream__position
+  stream__brokerFeeAmount
+  stream__protocolFeeAmount
+  subgraphId
+  timestamp
+  addressA
+  addressB
+  amountA
+  amountB
+}
+
+enum ActionCategory {
+  Approval
+  ApprovalForAll
+  Cancel
+  Create
+  Renounce
+  Transfer
+  Withdraw
+}
+
+enum Aggregation_interval {
+  hour
+  day
+}
+
+type Asset {
+  """unique identifier resolving to the ERC20 asset/token address"""
+  id: ID!
+
+  """address of the ERC20 asset/token"""
+  address: Bytes!
+
+  """hardcoded chain id"""
+  chainId: BigInt!
+
+  """decimals of the ERC20 asset/token"""
+  decimals: BigInt!
+
+  """name of the ERC20 asset/token"""
+  name: String!
+
+  """symbol of the ERC20 asset/token"""
+  symbol: String!
+
+  """streams that rely on this asset/token"""
+  streams(skip: Int = 0, first: Int = 100, orderBy: Stream_orderBy, orderDirection: OrderDirection, where: Stream_filter): [Stream!]!
+}
+
+input Asset_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  address: Bytes
+  address_not: Bytes
+  address_gt: Bytes
+  address_lt: Bytes
+  address_gte: Bytes
+  address_lte: Bytes
+  address_in: [Bytes!]
+  address_not_in: [Bytes!]
+  address_contains: Bytes
+  address_not_contains: Bytes
+  chainId: BigInt
+  chainId_not: BigInt
+  chainId_gt: BigInt
+  chainId_lt: BigInt
+  chainId_gte: BigInt
+  chainId_lte: BigInt
+  chainId_in: [BigInt!]
+  chainId_not_in: [BigInt!]
+  decimals: BigInt
+  decimals_not: BigInt
+  decimals_gt: BigInt
+  decimals_lt: BigInt
+  decimals_gte: BigInt
+  decimals_lte: BigInt
+  decimals_in: [BigInt!]
+  decimals_not_in: [BigInt!]
+  name: String
+  name_not: String
+  name_gt: String
+  name_lt: String
+  name_gte: String
+  name_lte: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_contains: String
+  name_contains_nocase: String
+  name_not_contains: String
+  name_not_contains_nocase: String
+  name_starts_with: String
+  name_starts_with_nocase: String
+  name_not_starts_with: String
+  name_not_starts_with_nocase: String
+  name_ends_with: String
+  name_ends_with_nocase: String
+  name_not_ends_with: String
+  name_not_ends_with_nocase: String
+  symbol: String
+  symbol_not: String
+  symbol_gt: String
+  symbol_lt: String
+  symbol_gte: String
+  symbol_lte: String
+  symbol_in: [String!]
+  symbol_not_in: [String!]
+  symbol_contains: String
+  symbol_contains_nocase: String
+  symbol_not_contains: String
+  symbol_not_contains_nocase: String
+  symbol_starts_with: String
+  symbol_starts_with_nocase: String
+  symbol_not_starts_with: String
+  symbol_not_starts_with_nocase: String
+  symbol_ends_with: String
+  symbol_ends_with_nocase: String
+  symbol_not_ends_with: String
+  symbol_not_ends_with_nocase: String
+  streams_: Stream_filter
+
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
+  and: [Asset_filter]
+  or: [Asset_filter]
+}
+
+enum Asset_orderBy {
+  id
+  address
+  chainId
+  decimals
+  name
+  symbol
+  streams
+}
+
+type Batch {
+  """
+  unique identifier of the batch, resolving to the hash of the parent transaction
+  """
+  id: String!
+
+  """number of streams that are part of this batch"""
+  size: BigInt!
+
+  """
+  index of the batch resolving to a conditional counter of 2+ stream batches, filtered by sender (label is null for batches containing a single stream, for filtering)
+  """
+  label: String
+
+  """batcher (sender) that started this batch"""
+  batcher: Batcher
+
+  """streams that are part of this batch"""
+  streams(skip: Int = 0, first: Int = 100, orderBy: Stream_orderBy, orderDirection: OrderDirection, where: Stream_filter): [Stream!]!
+
+  """hash of the transaction that created this batch"""
+  hash: Bytes!
+
+  """timestamp of the transaction that created this batch"""
+  timestamp: BigInt!
+}
+
+input Batch_filter {
+  id: String
+  id_not: String
+  id_gt: String
+  id_lt: String
+  id_gte: String
+  id_lte: String
+  id_in: [String!]
+  id_not_in: [String!]
+  id_contains: String
+  id_contains_nocase: String
+  id_not_contains: String
+  id_not_contains_nocase: String
+  id_starts_with: String
+  id_starts_with_nocase: String
+  id_not_starts_with: String
+  id_not_starts_with_nocase: String
+  id_ends_with: String
+  id_ends_with_nocase: String
+  id_not_ends_with: String
+  id_not_ends_with_nocase: String
+  size: BigInt
+  size_not: BigInt
+  size_gt: BigInt
+  size_lt: BigInt
+  size_gte: BigInt
+  size_lte: BigInt
+  size_in: [BigInt!]
+  size_not_in: [BigInt!]
+  label: String
+  label_not: String
+  label_gt: String
+  label_lt: String
+  label_gte: String
+  label_lte: String
+  label_in: [String!]
+  label_not_in: [String!]
+  label_contains: String
+  label_contains_nocase: String
+  label_not_contains: String
+  label_not_contains_nocase: String
+  label_starts_with: String
+  label_starts_with_nocase: String
+  label_not_starts_with: String
+  label_not_starts_with_nocase: String
+  label_ends_with: String
+  label_ends_with_nocase: String
+  label_not_ends_with: String
+  label_not_ends_with_nocase: String
+  batcher: String
+  batcher_not: String
+  batcher_gt: String
+  batcher_lt: String
+  batcher_gte: String
+  batcher_lte: String
+  batcher_in: [String!]
+  batcher_not_in: [String!]
+  batcher_contains: String
+  batcher_contains_nocase: String
+  batcher_not_contains: String
+  batcher_not_contains_nocase: String
+  batcher_starts_with: String
+  batcher_starts_with_nocase: String
+  batcher_not_starts_with: String
+  batcher_not_starts_with_nocase: String
+  batcher_ends_with: String
+  batcher_ends_with_nocase: String
+  batcher_not_ends_with: String
+  batcher_not_ends_with_nocase: String
+  batcher_: Batcher_filter
+  streams_: Stream_filter
+  hash: Bytes
+  hash_not: Bytes
+  hash_gt: Bytes
+  hash_lt: Bytes
+  hash_gte: Bytes
+  hash_lte: Bytes
+  hash_in: [Bytes!]
+  hash_not_in: [Bytes!]
+  hash_contains: Bytes
+  hash_not_contains: Bytes
+  timestamp: BigInt
+  timestamp_not: BigInt
+  timestamp_gt: BigInt
+  timestamp_lt: BigInt
+  timestamp_gte: BigInt
+  timestamp_lte: BigInt
+  timestamp_in: [BigInt!]
+  timestamp_not_in: [BigInt!]
+
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
+  and: [Batch_filter]
+  or: [Batch_filter]
+}
+
+enum Batch_orderBy {
+  id
+  size
+  label
+  batcher
+  batcher__id
+  batcher__address
+  batcher__batchIndex
+  streams
+  hash
+  timestamp
+}
+
+type Batcher {
+  """unique identifier of the batcher (sender), resolving to their address"""
+  id: String!
+
+  """address of the sender"""
+  address: Bytes!
+
+  """numeric index, will be used to construct the batch label"""
+  batchIndex: BigInt!
+
+  """batches started by this batcher (sender)"""
+  batches(skip: Int = 0, first: Int = 100, orderBy: Batch_orderBy, orderDirection: OrderDirection, where: Batch_filter): [Batch!]!
+}
+
+input Batcher_filter {
+  id: String
+  id_not: String
+  id_gt: String
+  id_lt: String
+  id_gte: String
+  id_lte: String
+  id_in: [String!]
+  id_not_in: [String!]
+  id_contains: String
+  id_contains_nocase: String
+  id_not_contains: String
+  id_not_contains_nocase: String
+  id_starts_with: String
+  id_starts_with_nocase: String
+  id_not_starts_with: String
+  id_not_starts_with_nocase: String
+  id_ends_with: String
+  id_ends_with_nocase: String
+  id_not_ends_with: String
+  id_not_ends_with_nocase: String
+  address: Bytes
+  address_not: Bytes
+  address_gt: Bytes
+  address_lt: Bytes
+  address_gte: Bytes
+  address_lte: Bytes
+  address_in: [Bytes!]
+  address_not_in: [Bytes!]
+  address_contains: Bytes
+  address_not_contains: Bytes
+  batchIndex: BigInt
+  batchIndex_not: BigInt
+  batchIndex_gt: BigInt
+  batchIndex_lt: BigInt
+  batchIndex_gte: BigInt
+  batchIndex_lte: BigInt
+  batchIndex_in: [BigInt!]
+  batchIndex_not_in: [BigInt!]
+  batches_: Batch_filter
+
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
+  and: [Batcher_filter]
+  or: [Batcher_filter]
+}
+
+enum Batcher_orderBy {
+  id
+  address
+  batchIndex
+  batches
+}
+
+scalar BigDecimal
+
+scalar BigInt
+
+input Block_height {
+  hash: Bytes
+  number: Int
+  number_gte: Int
+}
+
+input BlockChangedFilter {
+  number_gte: Int!
+}
+
+scalar Bytes
+
+type Contract {
+  """unique identifier resolving to contract address"""
+  id: String!
+
+  """
+  full version based on the v2-core contract versioning system (e.g. '2.0' / '2.1')
+  """
+  version: String!
+
+  """
+  hardcoded alias, resolved by replacing the contract address from the id with the contract alias
+  """
+  alias: String!
+
+  """address of the contract"""
+  address: Bytes!
+
+  """address of the contract admin"""
+  admin: Bytes
+
+  """category of contract e.g. LockupLinear or LockupDynamic"""
+  category: ContractCategory!
+
+  """streams created through this contract"""
+  streams(skip: Int = 0, first: Int = 100, orderBy: Stream_orderBy, orderDirection: OrderDirection, where: Stream_filter): [Stream!]!
+
+  """actions on streams, triggered through this contract"""
+  actions(skip: Int = 0, first: Int = 100, orderBy: Action_orderBy, orderDirection: OrderDirection, where: Action_filter): [Action!]!
+}
+
+input Contract_filter {
+  id: String
+  id_not: String
+  id_gt: String
+  id_lt: String
+  id_gte: String
+  id_lte: String
+  id_in: [String!]
+  id_not_in: [String!]
+  id_contains: String
+  id_contains_nocase: String
+  id_not_contains: String
+  id_not_contains_nocase: String
+  id_starts_with: String
+  id_starts_with_nocase: String
+  id_not_starts_with: String
+  id_not_starts_with_nocase: String
+  id_ends_with: String
+  id_ends_with_nocase: String
+  id_not_ends_with: String
+  id_not_ends_with_nocase: String
+  version: String
+  version_not: String
+  version_gt: String
+  version_lt: String
+  version_gte: String
+  version_lte: String
+  version_in: [String!]
+  version_not_in: [String!]
+  version_contains: String
+  version_contains_nocase: String
+  version_not_contains: String
+  version_not_contains_nocase: String
+  version_starts_with: String
+  version_starts_with_nocase: String
+  version_not_starts_with: String
+  version_not_starts_with_nocase: String
+  version_ends_with: String
+  version_ends_with_nocase: String
+  version_not_ends_with: String
+  version_not_ends_with_nocase: String
+  alias: String
+  alias_not: String
+  alias_gt: String
+  alias_lt: String
+  alias_gte: String
+  alias_lte: String
+  alias_in: [String!]
+  alias_not_in: [String!]
+  alias_contains: String
+  alias_contains_nocase: String
+  alias_not_contains: String
+  alias_not_contains_nocase: String
+  alias_starts_with: String
+  alias_starts_with_nocase: String
+  alias_not_starts_with: String
+  alias_not_starts_with_nocase: String
+  alias_ends_with: String
+  alias_ends_with_nocase: String
+  alias_not_ends_with: String
+  alias_not_ends_with_nocase: String
+  address: Bytes
+  address_not: Bytes
+  address_gt: Bytes
+  address_lt: Bytes
+  address_gte: Bytes
+  address_lte: Bytes
+  address_in: [Bytes!]
+  address_not_in: [Bytes!]
+  address_contains: Bytes
+  address_not_contains: Bytes
+  admin: Bytes
+  admin_not: Bytes
+  admin_gt: Bytes
+  admin_lt: Bytes
+  admin_gte: Bytes
+  admin_lte: Bytes
+  admin_in: [Bytes!]
+  admin_not_in: [Bytes!]
+  admin_contains: Bytes
+  admin_not_contains: Bytes
+  category: ContractCategory
+  category_not: ContractCategory
+  category_in: [ContractCategory!]
+  category_not_in: [ContractCategory!]
+  streams_: Stream_filter
+  actions_: Action_filter
+
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
+  and: [Contract_filter]
+  or: [Contract_filter]
+}
+
+enum Contract_orderBy {
+  id
+  version
+  alias
+  address
+  admin
+  category
+  streams
+  actions
+}
+
+enum ContractCategory {
+  LockupDynamic
+  LockupLinear
+  LockupTranched
+}
+
+"""8 bytes signed integer"""
+scalar Int8
+
+"""Defines the order direction, either ascending or descending"""
+enum OrderDirection {
+  asc
+  desc
+}
+
+type Query {
+  action(
+    id: ID!
+
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): Action
+  actions(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Action_orderBy
+    orderDirection: OrderDirection
+    where: Action_filter
+
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [Action!]!
+  asset(
+    id: ID!
+
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): Asset
+  assets(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Asset_orderBy
+    orderDirection: OrderDirection
+    where: Asset_filter
+
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [Asset!]!
+  batch(
+    id: ID!
+
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): Batch
+  batches(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Batch_orderBy
+    orderDirection: OrderDirection
+    where: Batch_filter
+
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [Batch!]!
+  batcher(
+    id: ID!
+
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): Batcher
+  batchers(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Batcher_orderBy
+    orderDirection: OrderDirection
+    where: Batcher_filter
+
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [Batcher!]!
+  contract(
+    id: ID!
+
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): Contract
+  contracts(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Contract_orderBy
+    orderDirection: OrderDirection
+    where: Contract_filter
+
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [Contract!]!
+  segment(
+    id: ID!
+
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): Segment
+  segments(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Segment_orderBy
+    orderDirection: OrderDirection
+    where: Segment_filter
+
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [Segment!]!
+  stream(
+    id: ID!
+
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): Stream
+  streams(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Stream_orderBy
+    orderDirection: OrderDirection
+    where: Stream_filter
+
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [Stream!]!
+  tranche(
+    id: ID!
+
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): Tranche
+  tranches(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Tranche_orderBy
+    orderDirection: OrderDirection
+    where: Tranche_filter
+
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [Tranche!]!
+  watcher(
+    id: ID!
+
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): Watcher
+  watchers(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Watcher_orderBy
+    orderDirection: OrderDirection
+    where: Watcher_filter
+
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [Watcher!]!
+
+  """Access to subgraph metadata"""
+  _meta(block: Block_height): _Meta_
+}
+
+type Segment {
+  """
+  unique id resolving to stream id concatenated with the position of the segment
+  """
+  id: String!
+
+  """position of the segment inside the array"""
+  position: BigInt!
+
+  """stream upon which the segment is used"""
+  stream: Stream!
+
+  """amount resolving to the value streamed during this segment"""
+  amount: BigInt!
+
+  """
+  exponent for the time passed percentage of the main amount compute function
+  """
+  exponent: BigInt!
+
+  """timestamp resolving to the end moment of the segment"""
+  milestone: BigInt!
+
+  """timestamp resolving to the *milestone* parameter"""
+  endTime: BigInt!
+
+  """
+  timestamp resolving to the start moment of the segment (the end time of previous segment or the startTime of the stream)
+  """
+  startTime: BigInt!
+
+  """
+  derived amount resoling to the total amount streamed until the start of the segment
+  """
+  startAmount: BigInt!
+
+  """
+  derived amount resoling to the total amount streamed until the end of the segment
+  """
+  endAmount: BigInt!
+}
+
+input Segment_filter {
+  id: String
+  id_not: String
+  id_gt: String
+  id_lt: String
+  id_gte: String
+  id_lte: String
+  id_in: [String!]
+  id_not_in: [String!]
+  id_contains: String
+  id_contains_nocase: String
+  id_not_contains: String
+  id_not_contains_nocase: String
+  id_starts_with: String
+  id_starts_with_nocase: String
+  id_not_starts_with: String
+  id_not_starts_with_nocase: String
+  id_ends_with: String
+  id_ends_with_nocase: String
+  id_not_ends_with: String
+  id_not_ends_with_nocase: String
+  position: BigInt
+  position_not: BigInt
+  position_gt: BigInt
+  position_lt: BigInt
+  position_gte: BigInt
+  position_lte: BigInt
+  position_in: [BigInt!]
+  position_not_in: [BigInt!]
+  stream: String
+  stream_not: String
+  stream_gt: String
+  stream_lt: String
+  stream_gte: String
+  stream_lte: String
+  stream_in: [String!]
+  stream_not_in: [String!]
+  stream_contains: String
+  stream_contains_nocase: String
+  stream_not_contains: String
+  stream_not_contains_nocase: String
+  stream_starts_with: String
+  stream_starts_with_nocase: String
+  stream_not_starts_with: String
+  stream_not_starts_with_nocase: String
+  stream_ends_with: String
+  stream_ends_with_nocase: String
+  stream_not_ends_with: String
+  stream_not_ends_with_nocase: String
+  stream_: Stream_filter
+  amount: BigInt
+  amount_not: BigInt
+  amount_gt: BigInt
+  amount_lt: BigInt
+  amount_gte: BigInt
+  amount_lte: BigInt
+  amount_in: [BigInt!]
+  amount_not_in: [BigInt!]
+  exponent: BigInt
+  exponent_not: BigInt
+  exponent_gt: BigInt
+  exponent_lt: BigInt
+  exponent_gte: BigInt
+  exponent_lte: BigInt
+  exponent_in: [BigInt!]
+  exponent_not_in: [BigInt!]
+  milestone: BigInt
+  milestone_not: BigInt
+  milestone_gt: BigInt
+  milestone_lt: BigInt
+  milestone_gte: BigInt
+  milestone_lte: BigInt
+  milestone_in: [BigInt!]
+  milestone_not_in: [BigInt!]
+  endTime: BigInt
+  endTime_not: BigInt
+  endTime_gt: BigInt
+  endTime_lt: BigInt
+  endTime_gte: BigInt
+  endTime_lte: BigInt
+  endTime_in: [BigInt!]
+  endTime_not_in: [BigInt!]
+  startTime: BigInt
+  startTime_not: BigInt
+  startTime_gt: BigInt
+  startTime_lt: BigInt
+  startTime_gte: BigInt
+  startTime_lte: BigInt
+  startTime_in: [BigInt!]
+  startTime_not_in: [BigInt!]
+  startAmount: BigInt
+  startAmount_not: BigInt
+  startAmount_gt: BigInt
+  startAmount_lt: BigInt
+  startAmount_gte: BigInt
+  startAmount_lte: BigInt
+  startAmount_in: [BigInt!]
+  startAmount_not_in: [BigInt!]
+  endAmount: BigInt
+  endAmount_not: BigInt
+  endAmount_gt: BigInt
+  endAmount_lt: BigInt
+  endAmount_gte: BigInt
+  endAmount_lte: BigInt
+  endAmount_in: [BigInt!]
+  endAmount_not_in: [BigInt!]
+
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
+  and: [Segment_filter]
+  or: [Segment_filter]
+}
+
+enum Segment_orderBy {
+  id
+  position
+  stream
+  stream__id
+  stream__alias
+  stream__subgraphId
+  stream__tokenId
+  stream__version
+  stream__category
+  stream__chainId
+  stream__hash
+  stream__timestamp
+  stream__funder
+  stream__sender
+  stream__recipient
+  stream__proxender
+  stream__proxied
+  stream__cliff
+  stream__cancelable
+  stream__renounceTime
+  stream__canceled
+  stream__canceledTime
+  stream__cliffTime
+  stream__cliffAmount
+  stream__endTime
+  stream__startTime
+  stream__duration
+  stream__transferable
+  stream__depositAmount
+  stream__intactAmount
+  stream__withdrawnAmount
+  stream__position
+  stream__brokerFeeAmount
+  stream__protocolFeeAmount
+  amount
+  exponent
+  milestone
+  endTime
+  startTime
+  startAmount
+  endAmount
+}
+
+type Stream {
+  """
+  unique identifier for the stream, resolving to the origin contract address concatenated with the chainId and the tokenId
+  """
+  id: String!
+
+  """
+  hardcoded alias, resolved by replacing the contract address from the id with the contract alias
+  """
+  alias: String!
+
+  """
+  unique global id tracked by the subgraph watcher - ኆ80 these may change if new contracts are added and the chronological order of streams changes
+  """
+  subgraphId: BigInt!
+
+  """
+  unique identifier for the stream released by the origin contract - same as the tokenId or streamId values given by the contract
+  """
+  tokenId: BigInt!
+
+  """
+  full version based on the v2-core contract versioning system (e.g. '2.0' / '2.1')
+  """
+  version: String!
+
+  """type of stream (for sorting reasons)"""
+  category: StreamCategory!
+
+  """hardcoded chain id"""
+  chainId: BigInt!
+
+  """contract through which this stream has been created"""
+  contract: Contract!
+
+  """transaction hash for the stream creation"""
+  hash: Bytes!
+
+  """timestamp of the stream creation (for sorting reasons)"""
+  timestamp: BigInt!
+
+  """
+  source of funds for the stream (anyone can create and fund a stream on any sender's behalf)
+  """
+  funder: Bytes!
+
+  """
+  manager of the stream, defined at creation by the funder (usually the same as the funder)
+  """
+  sender: Bytes!
+
+  """
+  current recipient of the stream, can withdraw the funds (the recipient can change on stream/nft transfer)
+  """
+  recipient: Bytes!
+
+  """
+  list of relevant stream parties (for filtering) - sender, recipient, possibly sender's
+  """
+  parties: [Bytes!]!
+
+  """
+  owner of the proxy when the stream is created through a PRBProxy (sender = proxy, proxender = owner(proxy))
+  """
+  proxender: Bytes
+
+  """flag for streams created through a proxy"""
+  proxied: Boolean!
+
+  """flag for linear streams with a cliff"""
+  cliff: Boolean!
+
+  """asset (ERC20 token) supported by this stream"""
+  asset: Asset!
+
+  """
+  flag showing the cancelability of the stream (making it false is a one-way trip)
+  """
+  cancelable: Boolean!
+
+  """
+  action in which the stream has been made non-cancelable (can be the deposit transaction or a different one)
+  """
+  renounceAction: Action
+
+  """timestamp for the when the stream was made non-cancelable"""
+  renounceTime: BigInt
+
+  """flag showing if the stream was (making it true is a one-way trip)"""
+  canceled: Boolean!
+
+  """action in which the stream was"""
+  canceledAction: Action
+
+  """timestamp for the when the stream was canceled"""
+  canceledTime: BigInt
+
+  """timestamp for the start of the cliff, only available on linear streams"""
+  cliffTime: BigInt
+
+  """derived amount of the cliff, only available on linear streams"""
+  cliffAmount: BigInt
+
+  """timestamp for the end of the stream"""
+  endTime: BigInt!
+
+  """timestamp for the start of the stream"""
+  startTime: BigInt!
+
+  """snapshot of the duration (difference between end and start time)"""
+  duration: BigInt!
+
+  """
+  flag showing the transferability of the stream (decided when the stream is created)
+  """
+  transferable: Boolean!
+
+  """amount deposit in the stream (without fees)"""
+  depositAmount: BigInt!
+
+  """
+  amount resolving to the sum still inside the stream (regardless of it being locked or not) (difference between deposit and withdrawn pre-cancel)
+  """
+  intactAmount: BigInt!
+
+  """amount resolving to the sum of all withdrawals"""
+  withdrawnAmount: BigInt!
+
+  """actions triggered in the context of this stream"""
+  actions(skip: Int = 0, first: Int = 100, orderBy: Action_orderBy, orderDirection: OrderDirection, where: Action_filter): [Action!]!
+
+  """
+  batch the stream is part of, only available when created within a batch create transaction
+  """
+  batch: Batch!
+
+  """
+  position in the batch, only available when created within a batch create transaction
+  """
+  position: BigInt!
+
+  """segments of the stream curve, only available on dynamic streams"""
+  segments(skip: Int = 0, first: Int = 100, orderBy: Segment_orderBy, orderDirection: OrderDirection, where: Segment_filter): [Segment!]!
+
+  """segments of the stream curve, only available on dynamic streams"""
+  tranches(skip: Int = 0, first: Int = 100, orderBy: Tranche_orderBy, orderDirection: OrderDirection, where: Tranche_filter): [Tranche!]!
+
+  """amount of fees paid to the broker"""
+  brokerFeeAmount: BigInt!
+
+  """amount of fees paid to the protocol"""
+  protocolFeeAmount: BigInt!
+}
+
+input Stream_filter {
+  id: String
+  id_not: String
+  id_gt: String
+  id_lt: String
+  id_gte: String
+  id_lte: String
+  id_in: [String!]
+  id_not_in: [String!]
+  id_contains: String
+  id_contains_nocase: String
+  id_not_contains: String
+  id_not_contains_nocase: String
+  id_starts_with: String
+  id_starts_with_nocase: String
+  id_not_starts_with: String
+  id_not_starts_with_nocase: String
+  id_ends_with: String
+  id_ends_with_nocase: String
+  id_not_ends_with: String
+  id_not_ends_with_nocase: String
+  alias: String
+  alias_not: String
+  alias_gt: String
+  alias_lt: String
+  alias_gte: String
+  alias_lte: String
+  alias_in: [String!]
+  alias_not_in: [String!]
+  alias_contains: String
+  alias_contains_nocase: String
+  alias_not_contains: String
+  alias_not_contains_nocase: String
+  alias_starts_with: String
+  alias_starts_with_nocase: String
+  alias_not_starts_with: String
+  alias_not_starts_with_nocase: String
+  alias_ends_with: String
+  alias_ends_with_nocase: String
+  alias_not_ends_with: String
+  alias_not_ends_with_nocase: String
+  subgraphId: BigInt
+  subgraphId_not: BigInt
+  subgraphId_gt: BigInt
+  subgraphId_lt: BigInt
+  subgraphId_gte: BigInt
+  subgraphId_lte: BigInt
+  subgraphId_in: [BigInt!]
+  subgraphId_not_in: [BigInt!]
+  tokenId: BigInt
+  tokenId_not: BigInt
+  tokenId_gt: BigInt
+  tokenId_lt: BigInt
+  tokenId_gte: BigInt
+  tokenId_lte: BigInt
+  tokenId_in: [BigInt!]
+  tokenId_not_in: [BigInt!]
+  version: String
+  version_not: String
+  version_gt: String
+  version_lt: String
+  version_gte: String
+  version_lte: String
+  version_in: [String!]
+  version_not_in: [String!]
+  version_contains: String
+  version_contains_nocase: String
+  version_not_contains: String
+  version_not_contains_nocase: String
+  version_starts_with: String
+  version_starts_with_nocase: String
+  version_not_starts_with: String
+  version_not_starts_with_nocase: String
+  version_ends_with: String
+  version_ends_with_nocase: String
+  version_not_ends_with: String
+  version_not_ends_with_nocase: String
+  category: StreamCategory
+  category_not: StreamCategory
+  category_in: [StreamCategory!]
+  category_not_in: [StreamCategory!]
+  chainId: BigInt
+  chainId_not: BigInt
+  chainId_gt: BigInt
+  chainId_lt: BigInt
+  chainId_gte: BigInt
+  chainId_lte: BigInt
+  chainId_in: [BigInt!]
+  chainId_not_in: [BigInt!]
+  contract: String
+  contract_not: String
+  contract_gt: String
+  contract_lt: String
+  contract_gte: String
+  contract_lte: String
+  contract_in: [String!]
+  contract_not_in: [String!]
+  contract_contains: String
+  contract_contains_nocase: String
+  contract_not_contains: String
+  contract_not_contains_nocase: String
+  contract_starts_with: String
+  contract_starts_with_nocase: String
+  contract_not_starts_with: String
+  contract_not_starts_with_nocase: String
+  contract_ends_with: String
+  contract_ends_with_nocase: String
+  contract_not_ends_with: String
+  contract_not_ends_with_nocase: String
+  contract_: Contract_filter
+  hash: Bytes
+  hash_not: Bytes
+  hash_gt: Bytes
+  hash_lt: Bytes
+  hash_gte: Bytes
+  hash_lte: Bytes
+  hash_in: [Bytes!]
+  hash_not_in: [Bytes!]
+  hash_contains: Bytes
+  hash_not_contains: Bytes
+  timestamp: BigInt
+  timestamp_not: BigInt
+  timestamp_gt: BigInt
+  timestamp_lt: BigInt
+  timestamp_gte: BigInt
+  timestamp_lte: BigInt
+  timestamp_in: [BigInt!]
+  timestamp_not_in: [BigInt!]
+  funder: Bytes
+  funder_not: Bytes
+  funder_gt: Bytes
+  funder_lt: Bytes
+  funder_gte: Bytes
+  funder_lte: Bytes
+  funder_in: [Bytes!]
+  funder_not_in: [Bytes!]
+  funder_contains: Bytes
+  funder_not_contains: Bytes
+  sender: Bytes
+  sender_not: Bytes
+  sender_gt: Bytes
+  sender_lt: Bytes
+  sender_gte: Bytes
+  sender_lte: Bytes
+  sender_in: [Bytes!]
+  sender_not_in: [Bytes!]
+  sender_contains: Bytes
+  sender_not_contains: Bytes
+  recipient: Bytes
+  recipient_not: Bytes
+  recipient_gt: Bytes
+  recipient_lt: Bytes
+  recipient_gte: Bytes
+  recipient_lte: Bytes
+  recipient_in: [Bytes!]
+  recipient_not_in: [Bytes!]
+  recipient_contains: Bytes
+  recipient_not_contains: Bytes
+  parties: [Bytes!]
+  parties_not: [Bytes!]
+  parties_contains: [Bytes!]
+  parties_contains_nocase: [Bytes!]
+  parties_not_contains: [Bytes!]
+  parties_not_contains_nocase: [Bytes!]
+  proxender: Bytes
+  proxender_not: Bytes
+  proxender_gt: Bytes
+  proxender_lt: Bytes
+  proxender_gte: Bytes
+  proxender_lte: Bytes
+  proxender_in: [Bytes!]
+  proxender_not_in: [Bytes!]
+  proxender_contains: Bytes
+  proxender_not_contains: Bytes
+  proxied: Boolean
+  proxied_not: Boolean
+  proxied_in: [Boolean!]
+  proxied_not_in: [Boolean!]
+  cliff: Boolean
+  cliff_not: Boolean
+  cliff_in: [Boolean!]
+  cliff_not_in: [Boolean!]
+  asset: String
+  asset_not: String
+  asset_gt: String
+  asset_lt: String
+  asset_gte: String
+  asset_lte: String
+  asset_in: [String!]
+  asset_not_in: [String!]
+  asset_contains: String
+  asset_contains_nocase: String
+  asset_not_contains: String
+  asset_not_contains_nocase: String
+  asset_starts_with: String
+  asset_starts_with_nocase: String
+  asset_not_starts_with: String
+  asset_not_starts_with_nocase: String
+  asset_ends_with: String
+  asset_ends_with_nocase: String
+  asset_not_ends_with: String
+  asset_not_ends_with_nocase: String
+  asset_: Asset_filter
+  cancelable: Boolean
+  cancelable_not: Boolean
+  cancelable_in: [Boolean!]
+  cancelable_not_in: [Boolean!]
+  renounceAction: String
+  renounceAction_not: String
+  renounceAction_gt: String
+  renounceAction_lt: String
+  renounceAction_gte: String
+  renounceAction_lte: String
+  renounceAction_in: [String!]
+  renounceAction_not_in: [String!]
+  renounceAction_contains: String
+  renounceAction_contains_nocase: String
+  renounceAction_not_contains: String
+  renounceAction_not_contains_nocase: String
+  renounceAction_starts_with: String
+  renounceAction_starts_with_nocase: String
+  renounceAction_not_starts_with: String
+  renounceAction_not_starts_with_nocase: String
+  renounceAction_ends_with: String
+  renounceAction_ends_with_nocase: String
+  renounceAction_not_ends_with: String
+  renounceAction_not_ends_with_nocase: String
+  renounceAction_: Action_filter
+  renounceTime: BigInt
+  renounceTime_not: BigInt
+  renounceTime_gt: BigInt
+  renounceTime_lt: BigInt
+  renounceTime_gte: BigInt
+  renounceTime_lte: BigInt
+  renounceTime_in: [BigInt!]
+  renounceTime_not_in: [BigInt!]
+  canceled: Boolean
+  canceled_not: Boolean
+  canceled_in: [Boolean!]
+  canceled_not_in: [Boolean!]
+  canceledAction: String
+  canceledAction_not: String
+  canceledAction_gt: String
+  canceledAction_lt: String
+  canceledAction_gte: String
+  canceledAction_lte: String
+  canceledAction_in: [String!]
+  canceledAction_not_in: [String!]
+  canceledAction_contains: String
+  canceledAction_contains_nocase: String
+  canceledAction_not_contains: String
+  canceledAction_not_contains_nocase: String
+  canceledAction_starts_with: String
+  canceledAction_starts_with_nocase: String
+  canceledAction_not_starts_with: String
+  canceledAction_not_starts_with_nocase: String
+  canceledAction_ends_with: String
+  canceledAction_ends_with_nocase: String
+  canceledAction_not_ends_with: String
+  canceledAction_not_ends_with_nocase: String
+  canceledAction_: Action_filter
+  canceledTime: BigInt
+  canceledTime_not: BigInt
+  canceledTime_gt: BigInt
+  canceledTime_lt: BigInt
+  canceledTime_gte: BigInt
+  canceledTime_lte: BigInt
+  canceledTime_in: [BigInt!]
+  canceledTime_not_in: [BigInt!]
+  cliffTime: BigInt
+  cliffTime_not: BigInt
+  cliffTime_gt: BigInt
+  cliffTime_lt: BigInt
+  cliffTime_gte: BigInt
+  cliffTime_lte: BigInt
+  cliffTime_in: [BigInt!]
+  cliffTime_not_in: [BigInt!]
+  cliffAmount: BigInt
+  cliffAmount_not: BigInt
+  cliffAmount_gt: BigInt
+  cliffAmount_lt: BigInt
+  cliffAmount_gte: BigInt
+  cliffAmount_lte: BigInt
+  cliffAmount_in: [BigInt!]
+  cliffAmount_not_in: [BigInt!]
+  endTime: BigInt
+  endTime_not: BigInt
+  endTime_gt: BigInt
+  endTime_lt: BigInt
+  endTime_gte: BigInt
+  endTime_lte: BigInt
+  endTime_in: [BigInt!]
+  endTime_not_in: [BigInt!]
+  startTime: BigInt
+  startTime_not: BigInt
+  startTime_gt: BigInt
+  startTime_lt: BigInt
+  startTime_gte: BigInt
+  startTime_lte: BigInt
+  startTime_in: [BigInt!]
+  startTime_not_in: [BigInt!]
+  duration: BigInt
+  duration_not: BigInt
+  duration_gt: BigInt
+  duration_lt: BigInt
+  duration_gte: BigInt
+  duration_lte: BigInt
+  duration_in: [BigInt!]
+  duration_not_in: [BigInt!]
+  transferable: Boolean
+  transferable_not: Boolean
+  transferable_in: [Boolean!]
+  transferable_not_in: [Boolean!]
+  depositAmount: BigInt
+  depositAmount_not: BigInt
+  depositAmount_gt: BigInt
+  depositAmount_lt: BigInt
+  depositAmount_gte: BigInt
+  depositAmount_lte: BigInt
+  depositAmount_in: [BigInt!]
+  depositAmount_not_in: [BigInt!]
+  intactAmount: BigInt
+  intactAmount_not: BigInt
+  intactAmount_gt: BigInt
+  intactAmount_lt: BigInt
+  intactAmount_gte: BigInt
+  intactAmount_lte: BigInt
+  intactAmount_in: [BigInt!]
+  intactAmount_not_in: [BigInt!]
+  withdrawnAmount: BigInt
+  withdrawnAmount_not: BigInt
+  withdrawnAmount_gt: BigInt
+  withdrawnAmount_lt: BigInt
+  withdrawnAmount_gte: BigInt
+  withdrawnAmount_lte: BigInt
+  withdrawnAmount_in: [BigInt!]
+  withdrawnAmount_not_in: [BigInt!]
+  actions_: Action_filter
+  batch: String
+  batch_not: String
+  batch_gt: String
+  batch_lt: String
+  batch_gte: String
+  batch_lte: String
+  batch_in: [String!]
+  batch_not_in: [String!]
+  batch_contains: String
+  batch_contains_nocase: String
+  batch_not_contains: String
+  batch_not_contains_nocase: String
+  batch_starts_with: String
+  batch_starts_with_nocase: String
+  batch_not_starts_with: String
+  batch_not_starts_with_nocase: String
+  batch_ends_with: String
+  batch_ends_with_nocase: String
+  batch_not_ends_with: String
+  batch_not_ends_with_nocase: String
+  batch_: Batch_filter
+  position: BigInt
+  position_not: BigInt
+  position_gt: BigInt
+  position_lt: BigInt
+  position_gte: BigInt
+  position_lte: BigInt
+  position_in: [BigInt!]
+  position_not_in: [BigInt!]
+  segments_: Segment_filter
+  tranches_: Tranche_filter
+  brokerFeeAmount: BigInt
+  brokerFeeAmount_not: BigInt
+  brokerFeeAmount_gt: BigInt
+  brokerFeeAmount_lt: BigInt
+  brokerFeeAmount_gte: BigInt
+  brokerFeeAmount_lte: BigInt
+  brokerFeeAmount_in: [BigInt!]
+  brokerFeeAmount_not_in: [BigInt!]
+  protocolFeeAmount: BigInt
+  protocolFeeAmount_not: BigInt
+  protocolFeeAmount_gt: BigInt
+  protocolFeeAmount_lt: BigInt
+  protocolFeeAmount_gte: BigInt
+  protocolFeeAmount_lte: BigInt
+  protocolFeeAmount_in: [BigInt!]
+  protocolFeeAmount_not_in: [BigInt!]
+
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
+  and: [Stream_filter]
+  or: [Stream_filter]
+}
+
+enum Stream_orderBy {
+  id
+  alias
+  subgraphId
+  tokenId
+  version
+  category
+  chainId
+  contract
+  contract__id
+  contract__version
+  contract__alias
+  contract__address
+  contract__admin
+  contract__category
+  hash
+  timestamp
+  funder
+  sender
+  recipient
+  parties
+  proxender
+  proxied
+  cliff
+  asset
+  asset__id
+  asset__address
+  asset__chainId
+  asset__decimals
+  asset__name
+  asset__symbol
+  cancelable
+  renounceAction
+  renounceAction__id
+  renounceAction__block
+  renounceAction__category
+  renounceAction__chainId
+  renounceAction__hash
+  renounceAction__from
+  renounceAction__subgraphId
+  renounceAction__timestamp
+  renounceAction__addressA
+  renounceAction__addressB
+  renounceAction__amountA
+  renounceAction__amountB
+  renounceTime
+  canceled
+  canceledAction
+  canceledAction__id
+  canceledAction__block
+  canceledAction__category
+  canceledAction__chainId
+  canceledAction__hash
+  canceledAction__from
+  canceledAction__subgraphId
+  canceledAction__timestamp
+  canceledAction__addressA
+  canceledAction__addressB
+  canceledAction__amountA
+  canceledAction__amountB
+  canceledTime
+  cliffTime
+  cliffAmount
+  endTime
+  startTime
+  duration
+  transferable
+  depositAmount
+  intactAmount
+  withdrawnAmount
+  actions
+  batch
+  batch__id
+  batch__size
+  batch__label
+  batch__hash
+  batch__timestamp
+  position
+  segments
+  tranches
+  brokerFeeAmount
+  protocolFeeAmount
+}
+
+enum StreamCategory {
+  LockupDynamic
+  LockupLinear
+  LockupTranched
+}
+
+type Subscription {
+  action(
+    id: ID!
+
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): Action
+  actions(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Action_orderBy
+    orderDirection: OrderDirection
+    where: Action_filter
+
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [Action!]!
+  asset(
+    id: ID!
+
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): Asset
+  assets(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Asset_orderBy
+    orderDirection: OrderDirection
+    where: Asset_filter
+
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [Asset!]!
+  batch(
+    id: ID!
+
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): Batch
+  batches(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Batch_orderBy
+    orderDirection: OrderDirection
+    where: Batch_filter
+
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [Batch!]!
+  batcher(
+    id: ID!
+
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): Batcher
+  batchers(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Batcher_orderBy
+    orderDirection: OrderDirection
+    where: Batcher_filter
+
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [Batcher!]!
+  contract(
+    id: ID!
+
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): Contract
+  contracts(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Contract_orderBy
+    orderDirection: OrderDirection
+    where: Contract_filter
+
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [Contract!]!
+  segment(
+    id: ID!
+
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): Segment
+  segments(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Segment_orderBy
+    orderDirection: OrderDirection
+    where: Segment_filter
+
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [Segment!]!
+  stream(
+    id: ID!
+
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): Stream
+  streams(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Stream_orderBy
+    orderDirection: OrderDirection
+    where: Stream_filter
+
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [Stream!]!
+  tranche(
+    id: ID!
+
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): Tranche
+  tranches(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Tranche_orderBy
+    orderDirection: OrderDirection
+    where: Tranche_filter
+
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [Tranche!]!
+  watcher(
+    id: ID!
+
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): Watcher
+  watchers(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Watcher_orderBy
+    orderDirection: OrderDirection
+    where: Watcher_filter
+
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [Watcher!]!
+
+  """Access to subgraph metadata"""
+  _meta(block: Block_height): _Meta_
+}
+
+"""A string representation of microseconds UNIX timestamp (16 digits)"""
+scalar Timestamp
+
+type Tranche {
+  """
+  unique id resolving to stream id concatenated with the position of the tranche
+  """
+  id: String!
+
+  """position of the tranche inside the array"""
+  position: BigInt!
+
+  """stream upon which the tranche is used"""
+  stream: Stream!
+
+  """amount resolving to the value streamed during this tranche"""
+  amount: BigInt!
+
+  """timestamp resolving to the end moment of the tranche"""
+  timestamp: BigInt!
+
+  """timestamp resolving to the *timestamp* parameter"""
+  endTime: BigInt!
+
+  """
+  timestamp resolving to the start moment of the timestamp (the end time of previous timestamp or the startTime of the stream)
+  """
+  startTime: BigInt!
+
+  """
+  derived amount resoling to the total amount streamed until the start of the timestamp
+  """
+  startAmount: BigInt!
+
+  """
+  derived amount resoling to the total amount streamed until the end of the timestamp
+  """
+  endAmount: BigInt!
+}
+
+input Tranche_filter {
+  id: String
+  id_not: String
+  id_gt: String
+  id_lt: String
+  id_gte: String
+  id_lte: String
+  id_in: [String!]
+  id_not_in: [String!]
+  id_contains: String
+  id_contains_nocase: String
+  id_not_contains: String
+  id_not_contains_nocase: String
+  id_starts_with: String
+  id_starts_with_nocase: String
+  id_not_starts_with: String
+  id_not_starts_with_nocase: String
+  id_ends_with: String
+  id_ends_with_nocase: String
+  id_not_ends_with: String
+  id_not_ends_with_nocase: String
+  position: BigInt
+  position_not: BigInt
+  position_gt: BigInt
+  position_lt: BigInt
+  position_gte: BigInt
+  position_lte: BigInt
+  position_in: [BigInt!]
+  position_not_in: [BigInt!]
+  stream: String
+  stream_not: String
+  stream_gt: String
+  stream_lt: String
+  stream_gte: String
+  stream_lte: String
+  stream_in: [String!]
+  stream_not_in: [String!]
+  stream_contains: String
+  stream_contains_nocase: String
+  stream_not_contains: String
+  stream_not_contains_nocase: String
+  stream_starts_with: String
+  stream_starts_with_nocase: String
+  stream_not_starts_with: String
+  stream_not_starts_with_nocase: String
+  stream_ends_with: String
+  stream_ends_with_nocase: String
+  stream_not_ends_with: String
+  stream_not_ends_with_nocase: String
+  stream_: Stream_filter
+  amount: BigInt
+  amount_not: BigInt
+  amount_gt: BigInt
+  amount_lt: BigInt
+  amount_gte: BigInt
+  amount_lte: BigInt
+  amount_in: [BigInt!]
+  amount_not_in: [BigInt!]
+  timestamp: BigInt
+  timestamp_not: BigInt
+  timestamp_gt: BigInt
+  timestamp_lt: BigInt
+  timestamp_gte: BigInt
+  timestamp_lte: BigInt
+  timestamp_in: [BigInt!]
+  timestamp_not_in: [BigInt!]
+  endTime: BigInt
+  endTime_not: BigInt
+  endTime_gt: BigInt
+  endTime_lt: BigInt
+  endTime_gte: BigInt
+  endTime_lte: BigInt
+  endTime_in: [BigInt!]
+  endTime_not_in: [BigInt!]
+  startTime: BigInt
+  startTime_not: BigInt
+  startTime_gt: BigInt
+  startTime_lt: BigInt
+  startTime_gte: BigInt
+  startTime_lte: BigInt
+  startTime_in: [BigInt!]
+  startTime_not_in: [BigInt!]
+  startAmount: BigInt
+  startAmount_not: BigInt
+  startAmount_gt: BigInt
+  startAmount_lt: BigInt
+  startAmount_gte: BigInt
+  startAmount_lte: BigInt
+  startAmount_in: [BigInt!]
+  startAmount_not_in: [BigInt!]
+  endAmount: BigInt
+  endAmount_not: BigInt
+  endAmount_gt: BigInt
+  endAmount_lt: BigInt
+  endAmount_gte: BigInt
+  endAmount_lte: BigInt
+  endAmount_in: [BigInt!]
+  endAmount_not_in: [BigInt!]
+
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
+  and: [Tranche_filter]
+  or: [Tranche_filter]
+}
+
+enum Tranche_orderBy {
+  id
+  position
+  stream
+  stream__id
+  stream__alias
+  stream__subgraphId
+  stream__tokenId
+  stream__version
+  stream__category
+  stream__chainId
+  stream__hash
+  stream__timestamp
+  stream__funder
+  stream__sender
+  stream__recipient
+  stream__proxender
+  stream__proxied
+  stream__cliff
+  stream__cancelable
+  stream__renounceTime
+  stream__canceled
+  stream__canceledTime
+  stream__cliffTime
+  stream__cliffAmount
+  stream__endTime
+  stream__startTime
+  stream__duration
+  stream__transferable
+  stream__depositAmount
+  stream__intactAmount
+  stream__withdrawnAmount
+  stream__position
+  stream__brokerFeeAmount
+  stream__protocolFeeAmount
+  amount
+  timestamp
+  endTime
+  startTime
+  startAmount
+  endAmount
+}
+
+type Watcher {
+  """
+  unique identifier for the watcher, resolving to the chainId - there is one watcher for entire subgraph
+  """
+  id: String!
+
+  """hardcoded chain id"""
+  chainId: BigInt!
+
+  """global index for streams"""
+  streamIndex: BigInt!
+
+  """global index for streams"""
+  actionIndex: BigInt!
+
+  """flag that defines the initialization status of the subgraph"""
+  initialized: Boolean!
+
+  """list of logs, for debugging purposes"""
+  logs: [String!]!
+}
+
+input Watcher_filter {
+  id: String
+  id_not: String
+  id_gt: String
+  id_lt: String
+  id_gte: String
+  id_lte: String
+  id_in: [String!]
+  id_not_in: [String!]
+  id_contains: String
+  id_contains_nocase: String
+  id_not_contains: String
+  id_not_contains_nocase: String
+  id_starts_with: String
+  id_starts_with_nocase: String
+  id_not_starts_with: String
+  id_not_starts_with_nocase: String
+  id_ends_with: String
+  id_ends_with_nocase: String
+  id_not_ends_with: String
+  id_not_ends_with_nocase: String
+  chainId: BigInt
+  chainId_not: BigInt
+  chainId_gt: BigInt
+  chainId_lt: BigInt
+  chainId_gte: BigInt
+  chainId_lte: BigInt
+  chainId_in: [BigInt!]
+  chainId_not_in: [BigInt!]
+  streamIndex: BigInt
+  streamIndex_not: BigInt
+  streamIndex_gt: BigInt
+  streamIndex_lt: BigInt
+  streamIndex_gte: BigInt
+  streamIndex_lte: BigInt
+  streamIndex_in: [BigInt!]
+  streamIndex_not_in: [BigInt!]
+  actionIndex: BigInt
+  actionIndex_not: BigInt
+  actionIndex_gt: BigInt
+  actionIndex_lt: BigInt
+  actionIndex_gte: BigInt
+  actionIndex_lte: BigInt
+  actionIndex_in: [BigInt!]
+  actionIndex_not_in: [BigInt!]
+  initialized: Boolean
+  initialized_not: Boolean
+  initialized_in: [Boolean!]
+  initialized_not_in: [Boolean!]
+  logs: [String!]
+  logs_not: [String!]
+  logs_contains: [String!]
+  logs_contains_nocase: [String!]
+  logs_not_contains: [String!]
+  logs_not_contains_nocase: [String!]
+
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
+  and: [Watcher_filter]
+  or: [Watcher_filter]
+}
+
+enum Watcher_orderBy {
+  id
+  chainId
+  streamIndex
+  actionIndex
+  initialized
+  logs
+}
