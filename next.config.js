@@ -1,7 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
 	images: {
-		domains: ['nguyenviet02.github.io']
+		remotePatterns: [
+			{
+				protocol: 'https',
+				hostname: 'nguyenviet02.github.io',
+				port: '',
+				pathname: '/token-images/**',
+				search: '',
+			},
+		],
 	}
 }
 
