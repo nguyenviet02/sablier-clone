@@ -22,7 +22,8 @@
       "@/*": ["./src/*"],
       "ui/*": ["./src/components/ui/*"],
       "icons/*": ["./public/icons/*"],
-      "shapes/*": ["./public/shapes/*"]
+      "shapes/*": ["./public/shapes/*"],
+      "graphql/*": ["./src/graphql/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

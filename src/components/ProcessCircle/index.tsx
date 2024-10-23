@@ -1,16 +1,18 @@
+import { Stream } from "@/lib/graphql/generated/types";
+import { TDataToken } from "@/types";
 import React, { useEffect, useState } from "react";
 
 type Props = {
   insidePercent: number; // % progress of the inside circle
   outsidePercent: number; // % progress of the outside circle
-	data: any
+  data: Stream;
 };
 
 const ProcessCircle = ({ insidePercent, outsidePercent, data }: Props) => {
   const calculateDasharray = (r: number): number => {
     return Math.PI * r * 2;
   };
-	const [currentDate, setCurrentDate] = useState(0)
+  const [currentDate, setCurrentDate] = useState(0);
 
   const calculateDashoffset = (
     percentageShown: number,
@@ -48,11 +50,11 @@ const ProcessCircle = ({ insidePercent, outsidePercent, data }: Props) => {
     );
     setWithDrawnDashOffset(newWithDrawnDashOffset);
     setStreamedDashOffset(newStreamedDashOffset);
-  }, [outsideCircleProperties.radius]);
+  }, [outsideCircleProperties.radius, insidePercent, outsidePercent]);
 
-	useEffect(() => {
-		setCurrentDate(new Date().getTime() / 1000)
-	}, [])
+  useEffect(() => {
+    setCurrentDate(new Date().getTime() / 1000);
+  }, []);
   return (
     <svg
       width={464}
@@ -113,14 +115,14 @@ const ProcessCircle = ({ insidePercent, outsidePercent, data }: Props) => {
           id="animation1"
           attributeName="stroke-dashoffset"
           from={outsideCircleProperties?.dashArray}
-          to={streamedDashOffset}
-          dur="5s"
+          to={streamedDashOffset ? streamedDashOffset : 0}
+          dur="2s"
           fill="freeze"
         />
         <animate
           id="animation2"
           attributeName="stroke-dashoffset"
-          from={streamedDashOffset}
+          from={streamedDashOffset > 0 ? streamedDashOffset : 0}
           to="0"
           dur={`${data?.endTime - currentDate}s`}
           begin="animation1.end"

@@ -152,7 +152,7 @@ const CreateStreamsForm = (props: Props) => {
             totalAmount: BigInt(totalAmount * 10 ** selectedToken?.decimals!),
             cancelable: true,
             transferable: true,
-            durations: { total: 1000000, cliff: 0 },
+            durations: { total: 3000, cliff: 0 },
             broker: {
               account: "0x0000000000000000000000000000000000000000",
               fee: BigInt(0),

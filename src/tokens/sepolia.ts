@@ -5,7 +5,7 @@ const sepoliaTokens: TDataToken[] = [
     address: "0xd7F7E45856B3F1974c1A4955A485de7fccBd2cbb",
     chainId: 11155111,
     decimals: 18,
-    logoURI: "https://nguyenviet02.github.io/token-images/DAI.png",
+    logoURI: "https://nguyenviet02.github.io/token-images/Symbol-Color.png",
     name: "NXV Token",
     symbol: "NXV",
   },
