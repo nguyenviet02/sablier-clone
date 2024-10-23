@@ -30,10 +30,19 @@ export const formatChainName = (chainName: string) => {
   }
 };
 
+export const amountToken = (value: number, decimals: number = 18) => {
+  return value / 10 ** decimals;
+};
+
 export const formatNumberToken = (value: number, decimals: number = 18) => {
-	// return value / 10 ** decimals and add a comma every 3 digits
-	const valueInString = (value / 10 ** decimals).toString();
-	const [integerPart, decimalPart] = valueInString.split(",");
-	const integerPartWithCommas = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-	return decimalPart ? `${integerPartWithCommas},${decimalPart}` : integerPartWithCommas;
+  // return value / 10 ** decimals and add a comma every 3 digits
+  const valueInString = amountToken(value, decimals).toString();
+  const [integerPart, decimalPart] = valueInString.split(",");
+  const integerPartWithCommas = integerPart.replace(
+    /\B(?=(\d{3})+(?!\d))/g,
+    ".",
+  );
+  return decimalPart
+    ? `${integerPartWithCommas},${decimalPart}`
+    : integerPartWithCommas;
 };

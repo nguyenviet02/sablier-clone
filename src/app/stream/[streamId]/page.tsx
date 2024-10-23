@@ -20,7 +20,7 @@ import ArrowLeft from "icons/ArrowLeft";
 import { Checkbox } from "@/components/ui/checkbox";
 import { CopyIcon } from "@radix-ui/react-icons";
 import Divider from "@/components/Divider";
-import { formatNumberToken, truncateString } from "@/utils";
+import { amountToken, formatNumberToken, truncateString } from "@/utils";
 import { Progress } from "@/components/ui/progress";
 import { useGetStream_ByIdLazyQuery } from "@/lib/graphql/graphql";
 import { Stream } from "@/lib/graphql/generated/types";
@@ -95,7 +95,6 @@ const DetailStream = (props: Props) => {
     const totalTime =
       Number(dataStreamQuery?.data?.stream?.endTime) -
       Number(dataStreamQuery?.data?.stream?.startTime);
-    console.log("☠️ ~ useEffect ~ totalTime:", dataStreamQuery?.data);
     const interval = setInterval(() => {
       const now = new Date().getTime() / 1000;
       const streamedPercent =
@@ -132,14 +131,16 @@ const DetailStream = (props: Props) => {
               />
               <div className="box-progress-stream flex h-[124px] w-[500px] items-center justify-center rounded-[14px] border-2 border-[#363b54] bg-[#363b5466] backdrop-blur-[7.5px]">
                 <p className="font-roboto-mono text-[46pt] font-bold text-white">
-                  {((streamedPercent / 100) * 1000)?.toFixed(4)}
+                  {(
+                    (streamedPercent / 100) *
+                    amountToken(dataStreamQuery?.data?.stream?.depositAmount)
+                  )?.toFixed(4)}
                 </p>
               </div>
               <p className="text-[13pt] font-bold text-[#e1e4ea]">
                 Out of {dataStreamQuery?.data?.stream?.asset?.name}{" "}
                 {formatNumberToken(
                   dataStreamQuery?.data?.stream?.depositAmount as number,
-                  streamToken?.decimals as number,
                 )}
               </p>
             </div>
