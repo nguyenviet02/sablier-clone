@@ -94,3 +94,137 @@ fragment StreamFragment on Stream {
     ...TrancheFragment
   }
 }
+
+query getStreams_BySender_Or_ByRecipient(
+  $first: Int!
+  $skip: Int!
+  $chainId: BigInt!
+  $recipient: Bytes!
+  $sender: Bytes!
+  $subgraphId: BigInt!
+) {
+  streams(
+    first: $first
+    skip: $skip
+    orderBy: subgraphId
+    orderDirection: desc
+    where: {
+      or: [
+        {
+          and: [
+            { sender: $sender }
+            { subgraphId_lt: $subgraphId }
+            { chainId: $chainId }
+          ]
+        }
+        {
+          and: [
+            { proxender: $sender }
+            { subgraphId_lt: $subgraphId }
+            { chainId: $chainId }
+          ]
+        }
+        {
+          and: [
+            { recipient: $recipient }
+            { subgraphId_lt: $subgraphId }
+            { chainId: $chainId }
+          ]
+        }
+      ]
+    }
+  ) {
+    ...StreamFragment
+  }
+}
+
+fragment AssetFragment on Asset {
+  id
+  address
+  chainId
+  decimals
+  name
+  symbol
+}
+
+fragment BatchFragment on Batch {
+  id
+  label
+  size
+}
+
+fragment ContractFragment on Contract {
+  id
+  address
+  category
+  version
+}
+
+fragment SegmentFragment on Segment {
+  id
+  position
+  amount
+  exponent
+  milestone
+  endTime
+  startTime
+  startAmount
+  endAmount
+}
+
+fragment TrancheFragment on Tranche {
+  id
+  position
+  amount
+  timestamp
+  endTime
+  startTime
+  startAmount
+  endAmount
+}
+
+fragment StreamFragment on Stream {
+  id
+  tokenId
+  subgraphId
+  chainId
+  alias
+  category
+  funder
+  sender
+  recipient
+  hash
+  timestamp
+  depositAmount
+  startTime
+  endTime
+  cliff
+  cliffTime
+  cliffAmount
+  cancelable
+  renounceTime
+  canceled
+  canceledTime
+  withdrawnAmount
+  intactAmount
+  position
+  proxied
+  proxender
+  transferable
+  version
+  asset {
+    ...AssetFragment
+  }
+  batch {
+    ...BatchFragment
+  }
+  contract {
+    ...ContractFragment
+  }
+  segments {
+    ...SegmentFragment
+  }
+  tranches {
+    ...TrancheFragment
+  }
+}
