@@ -1,11 +1,44 @@
-import { http, cookieStorage, createConfig, createStorage } from 'wagmi';
-import { mainnet, sepolia, bsc, arbitrum, avalanche, base, blast, gnosis, iotex, lightlinkPhoenix, linea, optimism, polygon, scroll } from 'wagmi/chains';
+import { http, cookieStorage, createConfig, createStorage } from "wagmi";
+import {
+  mainnet,
+  sepolia,
+  bsc,
+  arbitrum,
+  avalanche,
+  base,
+  blast,
+  gnosis,
+  iotex,
+  lightlinkPhoenix,
+  linea,
+  optimism,
+  polygon,
+  scroll,
+} from "wagmi/chains";
 
 export function getConfig() {
   return createConfig({
-    chains: [mainnet, sepolia, bsc, arbitrum, avalanche, base, blast, gnosis, iotex, lightlinkPhoenix, linea, optimism, polygon, scroll],
+    chains: [
+      mainnet,
+      sepolia,
+      bsc,
+      arbitrum,
+      avalanche,
+      base,
+      blast,
+      gnosis,
+      iotex,
+      lightlinkPhoenix,
+      linea,
+      optimism,
+      polygon,
+      scroll,
+    ],
     storage: createStorage({
-      storage: cookieStorage,
+      storage:
+        typeof window !== "undefined" && window.localStorage
+          ? window.localStorage
+          : cookieStorage,
     }),
     ssr: true,
     transports: {
@@ -27,7 +60,7 @@ export function getConfig() {
   });
 }
 
-declare module 'wagmi' {
+declare module "wagmi" {
   interface Register {
     config: ReturnType<typeof getConfig>;
   }

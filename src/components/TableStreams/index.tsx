@@ -22,7 +22,6 @@ const TableStreams = (props: Props) => {
   const [callDataListStreamsQuery, dataListStreamsQuery] =
     useGetStreams_BySender_Or_ByRecipientLazyQuery();
   const listStreams = dataListStreamsQuery?.data?.streams;
-  console.log("☠️ ~ TableStreams ~ listStreams:", listStreams);
 
   const goToDetailStream = (streamId: string) => {
     router?.push(`/stream/${streamId}`);

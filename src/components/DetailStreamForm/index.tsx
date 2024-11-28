@@ -26,7 +26,6 @@ const DetailStreamForm = ({
   dataStreams,
   setDataStreams,
 }: Props) => {
-  console.log('☠️ ~ dataDetail:', dataDetail)
   const currentIndex = useMemo(() => {
     return dataStreams.findIndex((data) => data.id === dataDetail.id) + 1;
   }, [dataStreams, dataDetail.id]);
