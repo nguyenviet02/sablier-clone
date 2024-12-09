@@ -62,7 +62,7 @@ const DialogConnectWallet = ({ isOpen, setIsOpen }: Props) => {
     if (selectedConnector && (status === 'pending' || status === 'error')) {
       return (
         <div className="size-full flex flex-col justify-center items-center pb-8">
-          <Image src={selectedConnector?.icon || ''} width={44} height={44} alt="Image" className="mb-2" />
+          <Image unoptimized src={selectedConnector?.icon || ''} width={44} height={44} alt="Image" className="mb-2" />
           <h2 className="text-white text-[18px] font-bold">Opening {selectedConnector?.name}...</h2>
           <p className="text-[#fff9] text-[14px] font-medium mb-2">Confirm connection in the extension</p>
           {status === 'error' ? (
@@ -103,7 +103,7 @@ const DialogConnectWallet = ({ isOpen, setIsOpen }: Props) => {
               type="button"
               className="flex items-center gap-3 w-full hover:bg-[#e0e8ff1a] border border-transparent p-[5px] rounded-xl"
             >
-              <Image src={connector?.icon || ''} alt="icon" width={28} height={28} />
+              <Image unoptimized src={connector?.icon || ''} alt="icon" width={28} height={28} />
               <p className="text-white font-bold">{connector.name}</p>
             </button>
           ))}
