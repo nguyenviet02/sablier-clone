@@ -1,9 +1,3 @@
-query getStream_ById($streamId: ID!) {
-  stream(id: $streamId) {
-    ...StreamFragment
-  }
-}
-
 fragment AssetFragment on Asset {
   id
   address
@@ -92,6 +86,12 @@ fragment StreamFragment on Stream {
   }
   tranches {
     ...TrancheFragment
+  }
+}
+
+query getStream_ById($streamId: ID!) {
+  stream(id: $streamId) {
+    ...StreamFragment
   }
 }
 
@@ -135,96 +135,5 @@ query getStreams_BySender_Or_ByRecipient(
     }
   ) {
     ...StreamFragment
-  }
-}
-
-fragment AssetFragment on Asset {
-  id
-  address
-  chainId
-  decimals
-  name
-  symbol
-}
-
-fragment BatchFragment on Batch {
-  id
-  label
-  size
-}
-
-fragment ContractFragment on Contract {
-  id
-  address
-  category
-  version
-}
-
-fragment SegmentFragment on Segment {
-  id
-  position
-  amount
-  exponent
-  milestone
-  endTime
-  startTime
-  startAmount
-  endAmount
-}
-
-fragment TrancheFragment on Tranche {
-  id
-  position
-  amount
-  timestamp
-  endTime
-  startTime
-  startAmount
-  endAmount
-}
-
-fragment StreamFragment on Stream {
-  id
-  tokenId
-  subgraphId
-  chainId
-  alias
-  category
-  funder
-  sender
-  recipient
-  hash
-  timestamp
-  depositAmount
-  startTime
-  endTime
-  cliff
-  cliffTime
-  cliffAmount
-  cancelable
-  renounceTime
-  canceled
-  canceledTime
-  withdrawnAmount
-  intactAmount
-  position
-  proxied
-  proxender
-  transferable
-  version
-  asset {
-    ...AssetFragment
-  }
-  batch {
-    ...BatchFragment
-  }
-  contract {
-    ...ContractFragment
-  }
-  segments {
-    ...SegmentFragment
-  }
-  tranches {
-    ...TrancheFragment
   }
 }

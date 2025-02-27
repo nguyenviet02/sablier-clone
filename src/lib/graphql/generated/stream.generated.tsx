@@ -8,13 +8,6 @@ import type * as Types from './types';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
-export type GetStream_ByIdQueryVariables = Types.Exact<{
-  streamId: Types.Scalars['ID']['input'];
-}>;
-
-
-export type GetStream_ByIdQuery = { __typename?: 'Query', stream?: { __typename?: 'Stream', id: string, tokenId: any, subgraphId: any, chainId: any, alias: string, category: Types.StreamCategory, funder: any, sender: any, recipient: any, hash: any, timestamp: any, depositAmount: any, startTime: any, endTime: any, cliff: boolean, cliffTime?: any | null, cliffAmount?: any | null, cancelable: boolean, renounceTime?: any | null, canceled: boolean, canceledTime?: any | null, withdrawnAmount: any, intactAmount: any, position: any, proxied: boolean, proxender?: any | null, transferable: boolean, version: string, asset: { __typename?: 'Asset', id: string, address: any, chainId: any, decimals: any, name: string, symbol: string }, batch: { __typename?: 'Batch', id: string, label?: string | null, size: any }, contract: { __typename?: 'Contract', id: string, address: any, category: Types.ContractCategory, version: string }, segments: Array<{ __typename?: 'Segment', id: string, position: any, amount: any, exponent: any, milestone: any, endTime: any, startTime: any, startAmount: any, endAmount: any }>, tranches: Array<{ __typename?: 'Tranche', id: string, position: any, amount: any, timestamp: any, endTime: any, startTime: any, startAmount: any, endAmount: any }> } | null };
-
 export type AssetFragment = { __typename?: 'Asset', id: string, address: any, chainId: any, decimals: any, name: string, symbol: string };
 
 export type BatchFragment = { __typename?: 'Batch', id: string, label?: string | null, size: any };
@@ -26,6 +19,13 @@ export type SegmentFragment = { __typename?: 'Segment', id: string, position: an
 export type TrancheFragment = { __typename?: 'Tranche', id: string, position: any, amount: any, timestamp: any, endTime: any, startTime: any, startAmount: any, endAmount: any };
 
 export type StreamFragment = { __typename?: 'Stream', id: string, tokenId: any, subgraphId: any, chainId: any, alias: string, category: Types.StreamCategory, funder: any, sender: any, recipient: any, hash: any, timestamp: any, depositAmount: any, startTime: any, endTime: any, cliff: boolean, cliffTime?: any | null, cliffAmount?: any | null, cancelable: boolean, renounceTime?: any | null, canceled: boolean, canceledTime?: any | null, withdrawnAmount: any, intactAmount: any, position: any, proxied: boolean, proxender?: any | null, transferable: boolean, version: string, asset: { __typename?: 'Asset', id: string, address: any, chainId: any, decimals: any, name: string, symbol: string }, batch: { __typename?: 'Batch', id: string, label?: string | null, size: any }, contract: { __typename?: 'Contract', id: string, address: any, category: Types.ContractCategory, version: string }, segments: Array<{ __typename?: 'Segment', id: string, position: any, amount: any, exponent: any, milestone: any, endTime: any, startTime: any, startAmount: any, endAmount: any }>, tranches: Array<{ __typename?: 'Tranche', id: string, position: any, amount: any, timestamp: any, endTime: any, startTime: any, startAmount: any, endAmount: any }> };
+
+export type GetStream_ByIdQueryVariables = Types.Exact<{
+  streamId: Types.Scalars['ID']['input'];
+}>;
+
+
+export type GetStream_ByIdQuery = { __typename?: 'Query', stream?: { __typename?: 'Stream', id: string, tokenId: any, subgraphId: any, chainId: any, alias: string, category: Types.StreamCategory, funder: any, sender: any, recipient: any, hash: any, timestamp: any, depositAmount: any, startTime: any, endTime: any, cliff: boolean, cliffTime?: any | null, cliffAmount?: any | null, cancelable: boolean, renounceTime?: any | null, canceled: boolean, canceledTime?: any | null, withdrawnAmount: any, intactAmount: any, position: any, proxied: boolean, proxender?: any | null, transferable: boolean, version: string, asset: { __typename?: 'Asset', id: string, address: any, chainId: any, decimals: any, name: string, symbol: string }, batch: { __typename?: 'Batch', id: string, label?: string | null, size: any }, contract: { __typename?: 'Contract', id: string, address: any, category: Types.ContractCategory, version: string }, segments: Array<{ __typename?: 'Segment', id: string, position: any, amount: any, exponent: any, milestone: any, endTime: any, startTime: any, startAmount: any, endAmount: any }>, tranches: Array<{ __typename?: 'Tranche', id: string, position: any, amount: any, timestamp: any, endTime: any, startTime: any, startAmount: any, endAmount: any }> } | null };
 
 export type GetStreams_BySender_Or_ByRecipientQueryVariables = Types.Exact<{
   first: Types.Scalars['Int']['input'];
@@ -38,18 +38,6 @@ export type GetStreams_BySender_Or_ByRecipientQueryVariables = Types.Exact<{
 
 
 export type GetStreams_BySender_Or_ByRecipientQuery = { __typename?: 'Query', streams: Array<{ __typename?: 'Stream', id: string, tokenId: any, subgraphId: any, chainId: any, alias: string, category: Types.StreamCategory, funder: any, sender: any, recipient: any, hash: any, timestamp: any, depositAmount: any, startTime: any, endTime: any, cliff: boolean, cliffTime?: any | null, cliffAmount?: any | null, cancelable: boolean, renounceTime?: any | null, canceled: boolean, canceledTime?: any | null, withdrawnAmount: any, intactAmount: any, position: any, proxied: boolean, proxender?: any | null, transferable: boolean, version: string, asset: { __typename?: 'Asset', id: string, address: any, chainId: any, decimals: any, name: string, symbol: string }, batch: { __typename?: 'Batch', id: string, label?: string | null, size: any }, contract: { __typename?: 'Contract', id: string, address: any, category: Types.ContractCategory, version: string }, segments: Array<{ __typename?: 'Segment', id: string, position: any, amount: any, exponent: any, milestone: any, endTime: any, startTime: any, startAmount: any, endAmount: any }>, tranches: Array<{ __typename?: 'Tranche', id: string, position: any, amount: any, timestamp: any, endTime: any, startTime: any, startAmount: any, endAmount: any }> }> };
-
-export type AssetFragment = { __typename?: 'Asset', id: string, address: any, chainId: any, decimals: any, name: string, symbol: string };
-
-export type BatchFragment = { __typename?: 'Batch', id: string, label?: string | null, size: any };
-
-export type ContractFragment = { __typename?: 'Contract', id: string, address: any, category: Types.ContractCategory, version: string };
-
-export type SegmentFragment = { __typename?: 'Segment', id: string, position: any, amount: any, exponent: any, milestone: any, endTime: any, startTime: any, startAmount: any, endAmount: any };
-
-export type TrancheFragment = { __typename?: 'Tranche', id: string, position: any, amount: any, timestamp: any, endTime: any, startTime: any, startAmount: any, endAmount: any };
-
-export type StreamFragment = { __typename?: 'Stream', id: string, tokenId: any, subgraphId: any, chainId: any, alias: string, category: Types.StreamCategory, funder: any, sender: any, recipient: any, hash: any, timestamp: any, depositAmount: any, startTime: any, endTime: any, cliff: boolean, cliffTime?: any | null, cliffAmount?: any | null, cancelable: boolean, renounceTime?: any | null, canceled: boolean, canceledTime?: any | null, withdrawnAmount: any, intactAmount: any, position: any, proxied: boolean, proxender?: any | null, transferable: boolean, version: string, asset: { __typename?: 'Asset', id: string, address: any, chainId: any, decimals: any, name: string, symbol: string }, batch: { __typename?: 'Batch', id: string, label?: string | null, size: any }, contract: { __typename?: 'Contract', id: string, address: any, category: Types.ContractCategory, version: string }, segments: Array<{ __typename?: 'Segment', id: string, position: any, amount: any, exponent: any, milestone: any, endTime: any, startTime: any, startAmount: any, endAmount: any }>, tranches: Array<{ __typename?: 'Tranche', id: string, position: any, amount: any, timestamp: any, endTime: any, startTime: any, startAmount: any, endAmount: any }> };
 
 export const AssetFragmentDoc = gql`
     fragment AssetFragment on Asset {
