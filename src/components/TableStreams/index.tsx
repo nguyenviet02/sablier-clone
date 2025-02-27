@@ -41,7 +41,7 @@ const TableStreams = (props: Props) => {
   }, [chainId, account?.address]);
   return (
     <Table>
-      <TableCaption>A list of your recent invoices.</TableCaption>
+      <TableCaption>A list of your stream.</TableCaption>
       <TableHeader>
         <TableRow>
           <TableHead>ID</TableHead>
