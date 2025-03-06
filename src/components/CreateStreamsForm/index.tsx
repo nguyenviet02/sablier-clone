@@ -26,15 +26,19 @@ import {
 } from "wagmi";
 import { sablierAbi } from "@/abis";
 import { erc20Abi } from "viem";
+import { toast } from "react-toastify";
 
 type Props = {};
+
+const sablierContractAddress = process.env
+  .NEXT_PUBLIC_SABLIER_CONTRACT_ADDRESS as `0x${string}`;
 
 const CreateStreamsForm = (props: Props) => {
   const searchParams = useSearchParams();
   const selectedShape = searchParams.get("shape");
   const account = useAccount();
-  console.log("☠️ ~ CreateStreamsForm ~ account:", account);
 
+  const [isCreating, setIsCreating] = React.useState(false);
   const [isOpenDialogConnectWallet, setIsOpenDialogConnectWallet] =
     React.useState(false);
   const [isOpenDialogChooseToken, setIsOpenDialogChooseToken] =
@@ -51,14 +55,19 @@ const CreateStreamsForm = (props: Props) => {
       isCancelable: false,
       isTransferable: false,
     });
+  console.log(
+    "☠️ ~ CreateStreamsForm ~ dataGeneralDetails:",
+    dataGeneralDetails,
+  );
   const [dataStreams, setDataStreams] = React.useState<TDataStream[]>([
     {
       id: v4(),
       amount: 0,
-      recipient: "",
+      recipient: "" as `0x${string}`,
       duration: "",
     },
   ]);
+  console.log("☠️ ~ CreateStreamsForm ~ dataStreams:", dataStreams);
 
   const totalAmount = useMemo(() => {
     return dataStreams.reduce((acc, stream) => {
@@ -86,7 +95,7 @@ const CreateStreamsForm = (props: Props) => {
       {
         id: v4(),
         amount: 0,
-        recipient: "",
+        recipient: "" as `0x${string}`,
         duration: "",
       },
     ]);
@@ -104,28 +113,34 @@ const CreateStreamsForm = (props: Props) => {
     useWriteContract();
 
   const allowSpendToken = async () => {
+    toast.info("Waiting for approval...");
     try {
       const res = await writeContractSpendTokenAsync({
         abi: erc20Abi,
         address: selectedToken?.address!,
         functionName: "approve",
         args: [
-          "0x14fcd1d4223621976c7594DA3d2bE3d5033c81E7", // Address of third party
+          sablierContractAddress, // Address of third party
           BigInt(totalAmount * 10 ** selectedToken?.decimals!), // Amount of token
         ],
       });
       if (res) {
+        toast.loading("Waiting for confirmation...");
         setHashOfTransaction(res);
       }
-    } catch (error) {}
+    } catch (error) {
+      toast.error("Error when approving token");
+      console.log(error);
+    }
   };
 
-  const dataWaitForAllowance = useWaitForTransactionReceipt({
-    hash: hashOfTransaction,
-    query: {
-      enabled: !!hashOfTransaction,
-    },
-  });
+  const { isSuccess: isSuccessApprove, isError: isErrorApprove } =
+    useWaitForTransactionReceipt({
+      hash: hashOfTransaction,
+      query: {
+        enabled: !!hashOfTransaction,
+      },
+    });
 
   const { data: allowanceAmount, refetch: refetchAllowanceAmount } =
     useReadContract({
@@ -134,36 +149,60 @@ const CreateStreamsForm = (props: Props) => {
       address: selectedToken?.address, //Address of token
       args: [
         account?.address!, //Address of owner
-        "0x14fcd1d4223621976c7594DA3d2bE3d5033c81E7", //Address of third party
+        sablierContractAddress, //Address of third party
       ],
     });
 
   const { writeContractAsync: writeContractCreateStreamsAsync } =
     useWriteContract();
-  const createStreams = async () => {
-    const res = await writeContractCreateStreamsAsync({
-      abi: sablierAbi,
-      address: "0x14fcd1d4223621976c7594DA3d2bE3d5033c81E7", // Address of contracts
-      functionName: "createWithDurationsLL",
-      args: [
-        "0xCa60c92B4380a5B1a1147340C35233632229eE9d", // Address of lockuplinear
-        selectedToken?.address!, // Address of token
-        [
-          {
-            sender: account?.address!,
-            recipient: "0x6766Ea9fCBD356Cf6B576307dcf05bC1dEb7Ad30",
-            totalAmount: BigInt(totalAmount * 10 ** selectedToken?.decimals!),
-            cancelable: true,
-            transferable: true,
-            durations: { total: 3000, cliff: 0 },
-            broker: {
-              account: "0x0000000000000000000000000000000000000000",
-              fee: BigInt(0),
-            },
-          },
-        ],
-      ],
-    });
+
+  const createStreams = () => {
+    toast.loading("Creating streams...");
+    setIsCreating(true);
+    return Promise.all(
+      dataStreams?.map((stream) => {
+        return writeContractCreateStreamsAsync({
+          abi: sablierAbi,
+          address: sablierContractAddress, // Address of contracts
+          functionName: "createWithDurationsLL",
+          args: [
+            "0xCa60c92B4380a5B1a1147340C35233632229eE9d", // Address of lockuplinear
+            selectedToken?.address!, // Address of token
+            [
+              {
+                sender: account?.address!,
+                recipient: stream.recipient as `0x${string}`,
+                totalAmount: BigInt(
+                  Number(stream?.amount || 0) * 10 ** selectedToken?.decimals!,
+                ),
+                cancelable: dataGeneralDetails.isCancelable,
+                transferable: dataGeneralDetails.isTransferable,
+                durations: { total: 3000, cliff: 0 },
+                broker: {
+                  account: "0x0000000000000000000000000000000000000000",
+                  fee: BigInt(0),
+                },
+              },
+            ],
+          ],
+        });
+      }),
+    )
+      .then(() => {
+        setIsCreating(false);
+        toast.dismiss();
+        toast.success(
+          "Streams created successfully. Please wait for confirmation...",
+        );
+        setHashOfTransaction(undefined!);
+        refetchAllowanceAmount();
+      })
+      .catch((error) => {
+        setIsCreating(false);
+        toast.dismiss();
+        toast.error("Error when creating streams");
+        console.log(error);
+      });
   };
 
   const isNeedApprove = useMemo(() => {
@@ -176,9 +215,37 @@ const CreateStreamsForm = (props: Props) => {
     );
   }, [selectedToken, totalAmount, allowanceAmount]);
 
+  const isReadyForCreate = useMemo(() => {
+    if (!account?.isConnected) return false;
+    if (!selectedToken) return false;
+    if (!totalAmount) return false;
+    if (isNeedApprove) return false;
+    if (dataStreams?.some((stream) => !stream.recipient)) return false;
+    if (dataStreams?.some((stream) => !stream.amount)) return false;
+    if (isCreating) return false;
+    return true;
+  }, [
+    account?.isConnected,
+    isNeedApprove,
+    selectedToken,
+    totalAmount,
+    dataStreams,
+    isCreating,
+  ]);
+
   useEffect(() => {
-    refetchAllowanceAmount();
-  }, [dataWaitForAllowance]);
+    if (isSuccessApprove) {
+      toast.dismiss();
+      toast.success("Token approved successfully");
+      setHashOfTransaction(undefined!);
+      refetchAllowanceAmount();
+    }
+    if (isErrorApprove) {
+      toast.dismiss();
+      toast.error("Error when approving token");
+      setHashOfTransaction(undefined!);
+    }
+  }, [isSuccessApprove, isErrorApprove]);
 
   return (
     <TooltipProvider>
@@ -511,8 +578,9 @@ const CreateStreamsForm = (props: Props) => {
             </div>
           )}
           <button
+            disabled={!isReadyForCreate}
             onClick={createStreams}
-            className="btn-create-streams flex h-[46px] w-full items-center justify-center rounded-lg font-bold text-white"
+            className="btn-create-streams flex h-[46px] w-full items-center justify-center rounded-lg bg-[#ffb800] font-bold text-white disabled:cursor-not-allowed disabled:opacity-50"
           >
             Create Streams
           </button>

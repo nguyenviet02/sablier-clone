@@ -24,7 +24,7 @@ export type TStreamGeneralDetail = {
 export type TDataStream = {
   id: string;
   amount: number | null;
-  recipient: string;
+  recipient: `0x${string}`;
   duration: string;
 };
 

@@ -9,6 +9,7 @@ import { getConfig } from "../wagmi";
 import { Providers } from "./providers";
 import Header from "@/components/Header";
 import ApolloProviderWrapper from "./apolloProvider";
+import { ToastContainer } from "react-toastify";
 
 const urbanist = Urbanist({ subsets: ["latin"] });
 
@@ -38,6 +39,7 @@ export default function RootLayout(props: { children: ReactNode }) {
             </section>
           </ApolloProviderWrapper>
         </Providers>
+        <ToastContainer />
       </body>
     </html>
   );
