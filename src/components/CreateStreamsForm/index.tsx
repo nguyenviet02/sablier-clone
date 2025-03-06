@@ -43,7 +43,7 @@ const CreateStreamsForm = (props: Props) => {
     null,
   );
   const [hashOfTransaction, setHashOfTransaction] =
-    React.useState<`0x${string}`>("0x");
+    React.useState<`0x${string}`>(undefined!);
   const [dataGeneralDetails, setDataGeneralDetails] =
     React.useState<TStreamGeneralDetail>({
       shape: "",
@@ -120,6 +120,13 @@ const CreateStreamsForm = (props: Props) => {
     } catch (error) {}
   };
 
+  const dataWaitForAllowance = useWaitForTransactionReceipt({
+    hash: hashOfTransaction,
+    query: {
+      enabled: !!hashOfTransaction,
+    },
+  });
+
   const { data: allowanceAmount, refetch: refetchAllowanceAmount } =
     useReadContract({
       abi: erc20Abi,
@@ -130,7 +137,6 @@ const CreateStreamsForm = (props: Props) => {
         "0x14fcd1d4223621976c7594DA3d2bE3d5033c81E7", //Address of third party
       ],
     });
-  console.log("☠️ ~ CreateStreamsForm ~ allowanceAmount:", allowanceAmount);
 
   const { writeContractAsync: writeContractCreateStreamsAsync } =
     useWriteContract();
@@ -169,6 +175,10 @@ const CreateStreamsForm = (props: Props) => {
       totalAmount
     );
   }, [selectedToken, totalAmount, allowanceAmount]);
+
+  useEffect(() => {
+    refetchAllowanceAmount();
+  }, [dataWaitForAllowance]);
 
   return (
     <TooltipProvider>

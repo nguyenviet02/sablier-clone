@@ -28,16 +28,16 @@ export default function RootLayout(props: { children: ReactNode }) {
   return (
     <html lang="en">
       <body suppressHydrationWarning={true} className={urbanist.className}>
-        <ApolloProviderWrapper>
-          <Providers initialState={initialState}>
+        <Providers initialState={initialState}>
+          <ApolloProviderWrapper>
             <section className="background-primary flex min-h-screen w-full flex-col">
               <Header />
               <div className="mx-auto size-full max-w-[1312px] flex-1 px-4">
                 {props.children}
               </div>
             </section>
-          </Providers>
-        </ApolloProviderWrapper>
+          </ApolloProviderWrapper>
+        </Providers>
       </body>
     </html>
   );

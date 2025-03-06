@@ -1,61 +1,18 @@
 import { http, cookieStorage, createConfig, createStorage } from "wagmi";
-import {
-  mainnet,
-  sepolia,
-  // bsc,
-  // arbitrum,
-  // avalanche,
-  // base,
-  // blast,
-  // gnosis,
-  // iotex,
-  // lightlinkPhoenix,
-  // linea,
-  // optimism,
-  // polygon,
-  // scroll,
-} from "wagmi/chains";
+import { mainnet, sepolia } from "wagmi/chains";
+import { coinbaseWallet, injected, walletConnect } from "wagmi/connectors";
 
 export function getConfig() {
   return createConfig({
-    chains: [
-      mainnet,
-      sepolia,
-      // bsc,
-      // arbitrum,
-      // avalanche,
-      // base,
-      // blast,
-      // gnosis,
-      // iotex,
-      // lightlinkPhoenix,
-      // linea,
-      // optimism,
-      // polygon,
-      // scroll,
-    ],
+    chains: [mainnet, sepolia],
+    connectors: [injected(), coinbaseWallet()],
     storage: createStorage({
-      storage:
-        typeof window !== "undefined" && window.localStorage
-          ? window.localStorage
-          : cookieStorage,
+      storage: cookieStorage,
     }),
     ssr: true,
     transports: {
       [mainnet.id]: http(),
-      [sepolia.id]: http("https://rpc.sepolia.org"),
-      // [bsc.id]: http(),
-      // [arbitrum.id]: http(),
-      // [avalanche.id]: http(),
-      // [base.id]: http(),
-      // [blast.id]: http(),
-      // [gnosis.id]: http(),
-      // [iotex.id]: http(),
-      // [lightlinkPhoenix.id]: http(),
-      // [linea.id]: http(),
-      // [optimism.id]: http(),
-      // [polygon.id]: http(),
-      // [scroll.id]: http(),
+      [sepolia.id]: http(),
     },
   });
 }
