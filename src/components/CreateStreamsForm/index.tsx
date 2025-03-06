@@ -100,10 +100,6 @@ const CreateStreamsForm = (props: Props) => {
     setIsOpenDialogChooseToken(true);
   };
 
-  const resultTest = useWaitForTransactionReceipt({
-    hash: hashOfTransaction,
-  });
-
   const { writeContractAsync: writeContractSpendTokenAsync } =
     useWriteContract();
 
@@ -134,6 +130,7 @@ const CreateStreamsForm = (props: Props) => {
         "0x14fcd1d4223621976c7594DA3d2bE3d5033c81E7", //Address of third party
       ],
     });
+  console.log("☠️ ~ CreateStreamsForm ~ allowanceAmount:", allowanceAmount);
 
   const { writeContractAsync: writeContractCreateStreamsAsync } =
     useWriteContract();
@@ -172,10 +169,6 @@ const CreateStreamsForm = (props: Props) => {
       totalAmount
     );
   }, [selectedToken, totalAmount, allowanceAmount]);
-
-  useEffect(() => {
-    refetchAllowanceAmount();
-  }, [resultTest?.data]);
 
   return (
     <TooltipProvider>
