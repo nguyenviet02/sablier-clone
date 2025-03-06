@@ -177,7 +177,7 @@ const CreateStreamsForm = (props: Props) => {
                 ),
                 cancelable: dataGeneralDetails.isCancelable,
                 transferable: dataGeneralDetails.isTransferable,
-                durations: { total: 3000, cliff: 0 },
+                durations: { total: 24 * 60 * 60 * 1000, cliff: 0 },
                 broker: {
                   account: "0x0000000000000000000000000000000000000000",
                   fee: BigInt(0),
