@@ -42,7 +42,7 @@ const TableStreams = (props: Props) => {
   return (
     <Table>
       <TableCaption>A list of your stream.</TableCaption>
-      <TableHeader>
+      <TableHeader className="pointer-events-none">
         <TableRow>
           <TableHead>ID</TableHead>
           <TableHead>VALUE</TableHead>
@@ -54,6 +54,7 @@ const TableStreams = (props: Props) => {
             <TableRow
               onClick={() => goToDetailStream(stream?.id)}
               key={stream?.id}
+              className="cursor-pointer hover:bg-core-orange/10"
             >
               <TableCell>{stream?.id}</TableCell>
               <TableCell>
