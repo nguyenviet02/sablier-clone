@@ -15,7 +15,7 @@ const DialogDatePicker = ({ isOpen, setIsOpen }: Props) => {
         aria-describedby={undefined}
         className="shadowDialog flex h-fit w-full max-w-[500px] flex-col items-start justify-start gap-0 rounded-3xl border-2 border-[#ffffff14] bg-[#212433] p-8 [&>button]:hidden"
       >
-        <div>1 days</div>
+        <div>12 hours</div>
       </DialogContent>
     </Dialog>
   );
