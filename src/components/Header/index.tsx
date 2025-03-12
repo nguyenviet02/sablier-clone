@@ -61,14 +61,11 @@ const Header = (props: Props) => {
         <TooltipProvider>
           <div className="mx-auto flex size-full max-w-[1312px] items-center justify-between px-4">
             <div className="relative h-full w-full flex-1 shrink-0">
-              <Link href={"/"} className="relative block h-full w-[150px]">
-                <Image
-                  src="/images/logo.svg"
-                  alt="logo"
-                  fill
-                  priority
-                  className="filter-orange"
-                />
+              <Link
+                href={"/"}
+                className="relative flex h-full w-[150px] items-center justify-center text-2xl font-bold text-orange-300"
+              >
+                Vesting Tool
               </Link>
             </div>
 
@@ -251,9 +248,9 @@ const Header = (props: Props) => {
         </TooltipProvider>
       </div>
       {pathname === "/" && (
-        <div className="h-[52px] w-full border-b-[2px] border-b-[#262a3b] bg-[#1A1D28]">
-          <div className="relative mx-auto flex size-full max-w-[1312px] items-center justify-between px-4">
-            <button className="button-header-message flex items-center justify-center gap-2 font-medium text-[#e1e4ea] hover:opacity-85">
+        <div className="h-[52px] w-full border-b-[2px] border-b-[#262a3b] bg-[#FCA02F] flex justify-center">
+          <div className="relative flex size-full max-w-[1312px] items-center justify-center px-4">
+            <button className="relative button-header-message flex items-center justify-center gap-2 font-medium text-[#e1e4ea] hover:opacity-85">
               <div className="bg-header-message flex size-8 items-center justify-center rounded-lg text-[#e1e4ea]">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -272,23 +269,9 @@ const Header = (props: Props) => {
                   ></path>
                 </svg>
               </div>
-              <p>Airstreams: Airdrop 100k recipients or more</p>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="2.5"
-                stroke="currentColor"
-                aria-hidden="true"
-                data-slot="icon"
-                className="size-[16px]"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"
-                ></path>
-              </svg>
+              <p className="text-black font-bold text-lg">
+                This is TESTNET version of Vesting Tool
+              </p>
             </button>
           </div>
         </div>

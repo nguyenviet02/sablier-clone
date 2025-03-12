@@ -184,11 +184,6 @@
       rgb(94, 37, 255) 100%
     );
   }
-  .button-header-message::after {
-    content: "";
-    @apply absolute -bottom-[2px] -left-1 z-20 h-[2px] w-[72px];
-    background: linear-gradient(90deg, #874fff00, #874fff 50%, #874fff00);
-  }
 
   input::-webkit-outer-spin-button,
   input::-webkit-inner-spin-button {
